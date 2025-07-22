@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal QR - Products</title>
+
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Internal CSS styles for the product display page -->
+    <style>
+        /* Reset default margins and padding, set font family */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body styling with light background */
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Full screen container with slight edge padding */
+        .page-container {
+            width: 100vw;
+            min-height: 100vh;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        /* Header container styling */
+        .header {
+            background: white;
+            padding: 15px 0px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100vw;
+            margin: 0 -10px;
+            left: 0;
+            right: 0;
+        }
+
+        /* Header content layout */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin: 0;
+            padding: 0 20px;
+            position: relative;
+            gap: 20px;
+        }
+
+        /* Voice-search row - hidden on desktop, shown on mobile */
+        .voice-search-row {
+            display: contents;
+            /* This makes the wrapper invisible on desktop */
+        }
+
+        /* Hamburger menu - positioned in top right corner */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            position: fixed;
+            top: 25px;
+            right: 20px;
+            transform: none;
+            z-index: 1001;
+        }
+
+        .hamburger-menu:hover {
+            background-color: #f8fafc;
+        }
+
+        .hamburger-line {
+            width: 18px;
+            height: 2px;
+            background-color: #4f46e5;
+            margin: 1.5px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* Hamburger animation when active */
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(-45deg) translate(-4px, 4px);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(45deg) translate(-4px, -4px);
+        }
+
+        /* Mobile profile sidebar panel */
+        .mobile-profile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding-top: 80px;
+        }
+
+        .mobile-profile-sidebar.open {
+            right: 0;
+        }
+
+        /* Sidebar overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Sidebar header */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        /* Sidebar close button */
+        .sidebar-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f8fafc;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .sidebar-close-btn:hover {
+            background: #e2e8f0;
+            color: #374151;
+            transform: scale(1.1);
+        }
+
+        .sidebar-user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .sidebar-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .sidebar-user-email {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .sidebar-user-dept {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Sidebar menu items */
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+            width: 100%;
+            text-align: left;
+            background: none;
+            font-size: 16px;
+            color: #374151;
+        }
+
+        .sidebar-menu-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .sidebar-menu-item i {
+            color: #4f46e5;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Sidebar footer */
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .sidebar-version {
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Voice recorder in header - left side */
+        .voice-recorder {
+            flex: 0 0 320px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Search container in the center of header */
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Profile container on the right */
+        .profile-container {
+            flex: 0 0 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        /* Search input field styling */
+        .search-bar {
+            width: 100%;
+            padding: 14px 50px 14px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            background: #ffffff;
+        }
+
+        /* Search input focus effect */
+        .search-bar:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Search icon positioning */
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .search-icon:hover {
+            color: #4f46e5;
+            background-color: #f1f5f9;
+        }
+
+        .profile-container:hover {
+            background-color: #f8fafc;
+            transform: translateY(-1px);
+        }
+
+        /* Profile icon styling */
+        .profile-icon {
+            font-size: 32px;
+            color: #4f46e5;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-container:hover .profile-icon {
+            color: #4338ca;
+            transform: scale(1.05);
+        }
+
+        /* Profile text styling */
+        .profile-text {
+            color: #374151;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .profile-container:hover .profile-text {
+            color: #1f2937;
+        }
+
+        /* Voice recorder button */
+        .voice-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .voice-btn:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .voice-btn.recording {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Voice button left content */
+        .voice-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Voice button right content */
+        .voice-right-content {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Voice icon styling */
+        .voice-icon {
+            font-size: 18px;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn:hover .voice-icon {
+            color: #4f46e5;
+        }
+
+        .voice-btn.recording .voice-icon {
+            color: #ef4444;
+        }
+
+        /* Voice text styling */
+        .voice-text {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn:hover .voice-text {
+            color: #4f46e5;
+        }
+
+        .voice-btn.recording .voice-text {
+            color: #ef4444;
+        }
+
+        /* Recording timer - positioned on the right side */
+        .recording-timer {
+            font-size: 12px;
+            color: #ef4444;
+            font-weight: 600;
+            min-width: 35px;
+            display: none;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .voice-btn.recording .recording-timer {
+            display: block;
+        }
+
+        /* Waveform animation container */
+        .waveform {
+            display: none;
+            align-items: center;
+            gap: 1px;
+            height: 18px;
+        }
+
+        .voice-btn.recording .waveform {
+            display: flex;
+        }
+
+        /* Individual waveform bars */
+        .wave-bar {
+            width: 2px;
+            background: #ef4444;
+            border-radius: 2px;
+            animation: waveAnimation 1.5s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .wave-bar:nth-child(6) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(7) {
+            animation-delay: 0.1s;
+        }
+
+        @keyframes waveAnimation {
+
+            0%,
+            100% {
+                height: 4px;
+                opacity: 0.6;
+            }
+
+            50% {
+                height: 16px;
+                opacity: 1;
+            }
+        }
+
+        /* Main content container */
+        .main-content {
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Hero section with tabs and filter */
+        .hero-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Controls container for tabs and filter */
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Tab buttons container */
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Individual tab button styling */
+        .tab-button {
+            padding: 10px 20px;
+            border: 2px solid #e1e1e1;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        /* Active tab button styling */
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Tab button hover effect */
+        .tab-button:hover:not(.active) {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        /* Filter dropdown styling */
+        .filter-container {
+            position: relative;
+        }
+
+        .filter-dropdown {
+            padding: 10px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .filter-dropdown:hover {
+            border-color: #667eea;
+        }
+
+        .filter-icon {
+            font-size: 14px;
+            color: #667eea;
+        }
+
+        /* Products grid container */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 80px;
+            padding: 0;
+        }
+
+        /* Individual product card styling */
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        /* Product card hover effect */
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Product image placeholder */
+        .product-image {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        /* Product name styling */
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        /* Product location styling */
+        .product-location {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Location icon styling */
+        .location-icon {
+            color: #667eea;
+        }
+
+        /* Bottom action buttons container */
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px 20px 12px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: none !important;
+            /* Force hidden on desktop */
+            justify-content: center;
+            gap: 20px;
+            z-index: 50;
+            width: 100vw;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Action button styling - more button-like */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 12px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: #667eea;
+            color: white;
+            border: 2px solid #667eea;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 140px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .action-button:hover {
+            background: #5a6fd8;
+            border-color: #5a6fd8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Action button icon styling */
+        .action-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        /* Action button text styling */
+        .action-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Pagination container */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-button {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.3s ease;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-button:hover {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background-color: #f8fafc;
+        }
+
+        .pagination-button.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+            color: #94a3b8;
+        }
+
+        .pagination-button:disabled:hover {
+            border-color: #e2e8f0;
+            color: #94a3b8;
+            background: white;
+        }
+
+        .pagination-info {
+            color: #64748b;
+            font-size: 14px;
+            margin: 0 15px;
+        }
+
+        /* Desktop media query to ensure bottom actions are hidden */
+        @media (min-width: 769px) {
+            .bottom-actions {
+                display: none !important;
+            }
+        }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 768px) {
+
+            /* Full screen container with smaller edge padding on mobile */
+            .page-container {
+                padding: 0 5px;
+            }
+
+            /* Adjust header for mobile - keep horizontal layout for voice and search */
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+                padding: 0 15px 0 15px;
+                align-items: stretch;
+                padding-right: 70px;
+                /* Add space for hamburger menu */
+            }
+
+            /* Voice and search horizontal layout */
+            .voice-search-row {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                order: 1;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .voice-recorder {
+                flex: 0 0 50%;
+                order: 1;
+                justify-content: center;
+                min-width: auto;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .voice-recorder.expanded {
+                flex: 0 0 70%;
+            }
+
+            .voice-recorder.collapsed {
+                flex: 0 0 60px;
+                justify-content: center;
+            }
+
+            .search-container {
+                flex: 0 0 50%;
+                order: 2;
+                max-width: none;
+                margin: 0;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .search-container.expanded {
+                flex: 0 0 70%;
+            }
+
+            .search-container.collapsed {
+                flex: 0 0 60px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            /* Collapsed state styling */
+            .voice-recorder.collapsed .voice-btn {
+                width: 50px;
+                height: 50px;
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+            }
+
+            .voice-recorder.collapsed .voice-text,
+            .voice-recorder.collapsed .voice-right-content {
+                display: none;
+            }
+
+            .search-container.collapsed .search-bar {
+                display: none;
+            }
+
+            .search-container.collapsed .search-icon {
+                position: static;
+                transform: none;
+                font-size: 18px;
+                padding: 15px;
+                border-radius: 50%;
+                background-color: #f1f5f9;
+                color: #4f46e5;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-right: 10px;
+                /* Add margin to prevent overlap with hamburger */
+            }
+
+            .search-container.collapsed .search-icon:hover {
+                background-color: #e2e8f0;
+                transform: scale(1.05);
+            }
+
+            /* Hide desktop profile, show hamburger menu */
+            .profile-container {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .profile-icon {
+                font-size: 28px;
+                margin-bottom: 0;
+                margin-right: 8px;
+            }
+
+            .profile-text {
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            .search-bar {
+                padding: 12px 45px 12px 16px;
+                font-size: 14px;
+                border-radius: 10px;
+            }
+
+            .search-icon {
+                right: 14px;
+                font-size: 14px;
+            }
+
+            .voice-btn {
+                padding: 12px 16px;
+                border-radius: 10px;
+            }
+
+            .voice-icon {
+                font-size: 16px;
+            }
+
+            .voice-text {
+                font-size: 13px;
+            }
+
+            .recording-timer {
+                font-size: 11px;
+                min-width: 30px;
+            }
+
+            .waveform {
+                height: 14px;
+                gap: 1px;
+            }
+
+            .wave-bar {
+                width: 2px;
+            }
+
+            @keyframes waveAnimation {
+
+                0%,
+                100% {
+                    height: 3px;
+                    opacity: 0.6;
+                }
+
+                50% {
+                    height: 12px;
+                    opacity: 1;
+                }
+            }
+
+            /* Stack controls vertically on mobile */
+            .controls-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .tab-buttons {
+                justify-content: flex-start;
+                gap: 8px;
+            }
+
+            .tab-button {
+                padding: 8px 16px;
+                font-size: 13px;
+                border-radius: 18px;
+            }
+
+            .filter-dropdown {
+                padding: 8px 12px;
+                font-size: 13px;
+                min-width: 100px;
+                border-radius: 18px;
+            }
+
+            .filter-icon {
+                font-size: 12px;
+            }
+
+            /* Reduce grid margin to account for smaller bottom actions */
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-bottom: 70px;
+                /* Reduced from 100px */
+            }
+
+            /* Adjust main content padding */
+            .main-content {
+                padding: 15px;
+            }
+
+            /* Show bottom actions on mobile with smaller padding */
+            .bottom-actions {
+                display: flex !important;
+                /* Override desktop hidden state */
+                gap: 15px;
+                padding: 8px 15px 10px 15px;
+            }
+
+            .action-button {
+                min-width: 120px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .action-icon {
+                font-size: 14px;
+                margin-right: 6px;
+            }
+
+            .action-text {
+                font-size: 13px;
+            }
+
+            /* Mobile pagination styling */
+            .pagination-container {
+                margin: 20px 0 80px 0;
+                gap: 8px;
+                padding: 0 10px;
+            }
+
+            .pagination-button {
+                padding: 8px 12px;
+                font-size: 13px;
+                min-width: 38px;
+                border-radius: 6px;
+            }
+
+            .pagination-info {
+                font-size: 12px;
+                margin: 0 8px;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Further mobile optimizations */
+            .page-container {
+                padding: 0 3px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                padding: 0 10px 0 10px;
+                align-items: stretch;
+                padding-right: 60px;
+                /* Add space for hamburger menu */
+            }
+
+            /* Voice and search horizontal layout */
+            .voice-search-row {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                order: 1;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .voice-recorder {
+                flex: 0 0 50%;
+                order: 1;
+                justify-content: center;
+                min-width: auto;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .voice-recorder.expanded {
+                flex: 0 0 75%;
+            }
+
+            .voice-recorder.collapsed {
+                flex: 0 0 50px;
+                justify-content: center;
+            }
+
+            .search-container {
+                flex: 0 0 50%;
+                order: 2;
+                max-width: none;
+                margin: 0;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .search-container.expanded {
+                flex: 0 0 75%;
+            }
+
+            .search-container.collapsed {
+                flex: 0 0 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            /* Collapsed state styling for smaller screens */
+            .voice-recorder.collapsed .voice-btn {
+                width: 45px;
+                height: 45px;
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+            }
+
+            .voice-recorder.collapsed .voice-text,
+            .voice-recorder.collapsed .voice-right-content {
+                display: none;
+            }
+
+            .search-container.collapsed .search-bar {
+                display: none;
+            }
+
+            .search-container.collapsed .search-icon {
+                position: static;
+                transform: none;
+                font-size: 16px;
+                padding: 14px;
+                border-radius: 50%;
+                background-color: #f1f5f9;
+                color: #667eea;
+                width: 45px;
+                height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-right: 8px;
+                /* Add margin to prevent overlap with hamburger */
+            }
+
+            .search-container.collapsed .search-icon:hover {
+                background-color: #e2e8f0;
+                transform: scale(1.05);
+            }
+
+            /* Hide desktop profile, show hamburger menu */
+            .profile-container {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .profile-icon {
+                font-size: 24px;
+                margin-bottom: 0;
+                margin-right: 6px;
+            }
+
+            .profile-text {
+                font-size: 11px;
+                font-weight: 600;
+            }
+
+            .voice-btn {
+                padding: 10px 14px;
+                border-radius: 8px;
+            }
+
+            .voice-icon {
+                font-size: 14px;
+            }
+
+            .voice-text {
+                font-size: 12px;
+            }
+
+            .recording-timer {
+                font-size: 10px;
+                min-width: 25px;
+            }
+
+            .waveform {
+                height: 12px;
+                gap: 1px;
+            }
+
+            .wave-bar {
+                width: 1.5px;
+            }
+
+            @keyframes waveAnimation {
+
+                0%,
+                100% {
+                    height: 2px;
+                    opacity: 0.6;
+                }
+
+                50% {
+                    height: 10px;
+                    opacity: 1;
+                }
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-button {
+                padding: 6px 12px;
+                font-size: 12px;
+                border-radius: 16px;
+            }
+
+            .filter-dropdown {
+                padding: 6px 10px;
+                font-size: 12px;
+                min-width: 90px;
+                border-radius: 16px;
+            }
+
+            .filter-icon {
+                font-size: 11px;
+            }
+
+            /* Smaller mobile pagination styling */
+            .pagination-container {
+                margin: 15px 0 70px 0;
+                gap: 6px;
+                padding: 0 8px;
+            }
+
+            .pagination-button {
+                padding: 6px 10px;
+                font-size: 12px;
+                min-width: 34px;
+                border-radius: 5px;
+            }
+
+            .pagination-info {
+                font-size: 11px;
+                margin: 0 6px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Full screen page container with edge padding -->
+    <div class="page-container">
+        <!-- Main header section with voice recorder, search and profile -->
+        <header class="header">
+            <div class="header-content">
+                <!-- Voice recorder and search in horizontal row on mobile -->
+                <div class="voice-search-row">
+                    <!-- Voice recorder on the left -->
+                    <div class="voice-recorder" id="voiceRecorderContainer">
+                        <div class="voice-btn" id="voiceRecorderBtn" onclick="toggleVoiceRecording()">
+                            <div class="voice-content">
+                                <i class="fas fa-microphone voice-icon" id="voiceIcon"></i>
+                                <span class="voice-text" id="voiceText">Voice Record</span>
+                            </div>
+                            <div class="voice-right-content">
+                                <!-- Waveform animation -->
+                                <div class="waveform" id="waveform">
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                </div>
+                                <!-- Timer on the side -->
+                                <div class="recording-timer" id="recordingTimer">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search bar container in the center -->
+                    <div class="search-container" id="searchContainer">
+                        <input type="text" class="search-bar" placeholder="Search products..." id="searchInput"
+                            onfocus="expandSearch()" onblur="collapseSearch()">
+                        <i class="fas fa-search search-icon" onclick="handleSearchIconClick()"></i>
+                    </div>
+                </div>
+
+                <!-- Profile icon and text on the right -->
+                <div class="profile-container" onclick="openProfile()">
+                    <i class="fas fa-user-circle profile-icon"></i>
+                    <span class="profile-text">My Profile</span>
+                </div>
+
+                <!-- Hamburger menu for mobile -->
+                <div class="hamburger-menu" onclick="toggleMobileSidebar()">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
+        <!-- Mobile profile sidebar -->
+        <div class="mobile-profile-sidebar" id="mobileProfileSidebar">
+            <!-- Close button at top right of entire sidebar -->
+            <button class="sidebar-close-btn" onclick="closeMobileSidebar()" title="Close sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="sidebar-user-name">John Doe</div>
+                    <div class="sidebar-user-email">john.doe@company.com</div>
+                    <div class="sidebar-user-dept">Production Department</div>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <div class="sidebar-menu">
+                <!-- Menu items removed - only showing user info and logout -->
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <button class="sidebar-menu-item" onclick="logout()"
+                    style="color: #ef4444; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                    <i class="fas fa-sign-out-alt" style="color: #ef4444;"></i>
+                    <span>Logout</span>
+                </button>
+                <div class="sidebar-version">Version 1.0.0</div>
+            </div>
+        </div>
+
+
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Hero section with tab buttons and filter -->
+            <section class="hero-section">
+                <div class="controls-container">
+                    <!-- Tab buttons for Mine/All selection -->
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="switchTab('mine')">
+                            Mine
+                        </button>
+                        <button class="tab-button" onclick="switchTab('all')">
+                            All
+                        </button>
+                    </div>
+
+                    <!-- Filter dropdown -->
+                    <div class="filter-container">
+                        <div class="filter-dropdown" onclick="toggleFilter()">
+                            <i class="fas fa-filter filter-icon"></i>
+                            <span id="filterText">Filter</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products grid section -->
+            <section class="products-section">
+                <div class="products-grid" id="productsGrid">
+                    <!-- Demo product cards will be generated by JavaScript -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer">
+                    <!-- Pagination will be generated by JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bottom action buttons -->
+    <div class="bottom-actions">
+        <!-- Add new product button -->
+        <div class="action-button add-product-btn" onclick="addNewProduct()">
+            <i class="fas fa-plus action-icon"></i>
+            <span class="action-text">Add New Product</span>
+        </div>
+
+        <!-- Open camera button -->
+        <div class="action-button camera-btn" onclick="openCamera()">
+            <i class="fas fa-camera action-icon"></i>
+            <span class="action-text">Open Camera</span>
+        </div>
+    </div>
+
+    <!-- JavaScript for interactivity and demo data -->
+    <script>
+        // Demo product data with complete information for detailed product pages
+        const demoProducts = [
+            {
+                id: 1,
+                name: "Designer Silk Evening Dress",
+                location: "Showroom",
+                image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1566479179817-c0e4b3c9efb4?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=300&fit=crop"
+                ],
+                department: "production",
+                quantity: 15,
+                remarks: "Premium quality silk dress with intricate embroidery work. Handle with care during transportation.",
+                createdAt: "2024-01-15T10:30:00Z",
+                category: "clothing"
+            },
+            {
+                id: 2,
+                name: "Luxury Leather Handbag",
+                location: "Inventory",
+                image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=300&fit=crop"
+                ],
+                department: "sampling",
+                quantity: 8,
+                remarks: "Italian leather handbag collection. Premium quality materials used. Limited edition series.",
+                createdAt: "2024-01-20T14:15:00Z",
+                category: "accessories"
+            },
+            {
+                id: 3,
+                name: "Swiss Automatic Watch",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1606859428786-1497b47d9df5?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 25,
+                remarks: "Precision timepiece with automatic movement. Water resistant up to 50m. Swiss made quality.",
+                createdAt: "2024-01-10T09:45:00Z",
+                category: "accessories"
+            },
+            {
+                id: 4,
+                name: "Italian Leather Loafers",
+                location: "Showroom",
+                image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&h=300&fit=crop"
+                ],
+                department: "production",
+                quantity: 12,
+                remarks: "Handcrafted Italian leather shoes. Available in multiple sizes. Premium comfort guarantee.",
+                createdAt: "2024-01-25T16:20:00Z",
+                category: "footwear"
+            },
+            {
+                id: 5,
+                name: "Premium Leather Jacket",
+                location: "Factory",
+                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=400&h=300&fit=crop"
+                ],
+                department: "hard goods",
+                quantity: 6,
+                remarks: "Premium grade leather jacket with modern cut. Limited edition collection. Weather resistant.",
+                createdAt: "2024-01-18T11:30:00Z",
+                category: "clothing"
+            },
+            {
+                id: 6,
+                name: "iPhone 15 Pro Max",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1592910147829-6f2c3a5b7faf?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 30,
+                remarks: "Latest iPhone model with advanced camera system and titanium build. Includes all accessories.",
+                createdAt: "2024-01-22T13:45:00Z",
+                category: "electronics"
+            },
+            {
+                id: 7,
+                name: "Couture Evening Gown",
+                location: "Inventory",
+                image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1566479179817-c0e4b3c9efb4?w=400&h=300&fit=crop"
+                ],
+                department: "sampling",
+                quantity: 3,
+                remarks: "Haute couture evening gown with beaded details. One-of-a-kind piece. Handle with extreme care.",
+                createdAt: "2024-01-12T08:20:00Z",
+                category: "clothing"
+            },
+            {
+                id: 8,
+                name: "Wireless Noise Cancelling Headphones",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 45,
+                remarks: "Premium wireless headphones with active noise cancellation. 30-hour battery life. Includes case.",
+                createdAt: "2024-01-08T15:10:00Z",
+                category: "electronics"
+            },
+            {
+                id: 9,
+                name: "Designer Sunglasses",
+                location: "Showroom",
+                image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&h=300&fit=crop"
+                ],
+                department: "front desk",
+                quantity: 20,
+                remarks: "Designer sunglasses with UV protection. Multiple frame colors available. Includes protective case.",
+                createdAt: "2024-01-28T12:00:00Z",
+                category: "accessories"
+            },
+            {
+                id: 10,
+                name: "Gaming Laptop",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 18,
+                remarks: "High-performance gaming laptop with RTX graphics. 144Hz display. Perfect for gaming and work.",
+                createdAt: "2024-01-05T09:30:00Z",
+                category: "electronics"
+            },
+            {
+                id: 11,
+                name: "Modern Office Desk",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1541558869434-2840d308329a?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop"
+                ],
+                department: "hard goods",
+                quantity: 10,
+                remarks: "Ergonomic modern office desk with cable management. Adjustable height feature. Easy assembly.",
+                createdAt: "2024-01-17T14:45:00Z",
+                category: "furniture"
+            },
+            {
+                id: 12,
+                name: "MacBook Pro 16-inch",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 12,
+                remarks: "Latest MacBook Pro with M3 chip. Professional grade performance. Includes charger and documentation.",
+                createdAt: "2024-01-14T16:25:00Z",
+                category: "electronics"
+            },
+            {
+                id: 13,
+                name: "Ergonomic Office Chair",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop"
+                ],
+                department: "production",
+                quantity: 22,
+                remarks: "Ergonomic office chair with lumbar support. Breathable mesh back. 5-year warranty included.",
+                createdAt: "2024-01-11T11:15:00Z",
+                category: "furniture"
+            },
+            {
+                id: 14,
+                name: "Wireless Bluetooth Speaker",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 35,
+                remarks: "Portable Bluetooth speaker with 360-degree sound. Waterproof design. 20-hour battery life.",
+                createdAt: "2024-01-19T13:50:00Z",
+                category: "electronics"
+            },
+            {
+                id: 15,
+                name: "Athletic Running Shoes",
+                location: "Factory",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&h=300&fit=crop"
+                ],
+                department: "sampling",
+                quantity: 40,
+                remarks: "Professional athletic running shoes with advanced cushioning. Multiple sizes available. Lightweight design.",
+                createdAt: "2024-01-23T10:35:00Z",
+                category: "footwear"
+            },
+            {
+                id: 16,
+                name: "Smart Fitness Tracker",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1544258943-e0c2b2ed4e96?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 28,
+                remarks: "Advanced fitness tracker with heart rate monitoring. GPS enabled. 7-day battery life.",
+                createdAt: "2024-01-26T15:40:00Z",
+                category: "electronics"
+            },
+            {
+                id: 17,
+                name: "Designer Wool Coat",
+                location: "Showroom",
+                image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=400&h=300&fit=crop"
+                ],
+                department: "production",
+                quantity: 8,
+                remarks: "Premium wool designer coat. Italian craftsmanship. Perfect for winter season. Dry clean only.",
+                createdAt: "2024-01-09T12:20:00Z",
+                category: "clothing"
+            },
+            {
+                id: 18,
+                name: "Professional Camera Kit",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 5,
+                remarks: "Professional DSLR camera kit with multiple lenses. Perfect for photography professionals. Includes accessories.",
+                createdAt: "2024-01-16T09:10:00Z",
+                category: "electronics"
+            },
+            {
+                id: 19,
+                name: "Luxury Perfume Set",
+                location: "Inventory",
+                image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1588405748880-12d1d2a59db9?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=300&fit=crop"
+                ],
+                department: "front desk",
+                quantity: 15,
+                remarks: "Exclusive luxury perfume collection. Limited edition set with gift packaging. Premium fragrance quality.",
+                createdAt: "2024-01-21T14:55:00Z",
+                category: "beauty"
+            },
+            {
+                id: 20,
+                name: "Mechanical Keyboard",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 32,
+                remarks: "Professional mechanical keyboard with RGB backlighting. Cherry MX switches. Programmable keys included.",
+                createdAt: "2024-01-07T16:05:00Z",
+                category: "electronics"
+            },
+            {
+                id: 21,
+                name: "Designer Backpack",
+                location: "Showroom",
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=400&h=300&fit=crop"
+                ],
+                department: "sampling",
+                quantity: 18,
+                remarks: "Premium designer backpack with laptop compartment. Water-resistant material. Perfect for travel and work.",
+                createdAt: "2024-01-24T11:25:00Z",
+                category: "accessories"
+            },
+            {
+                id: 22,
+                name: "Tablet with Stylus",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 14,
+                remarks: "High-resolution tablet with pressure-sensitive stylus. Perfect for digital art and note-taking.",
+                createdAt: "2024-01-13T13:15:00Z",
+                category: "electronics"
+            },
+            {
+                id: 23,
+                name: "Crystal Jewelry Set",
+                location: "Inventory",
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&h=300&fit=crop"
+                ],
+                department: "front desk",
+                quantity: 7,
+                remarks: "Elegant crystal jewelry set with matching necklace and earrings. Comes with luxury gift box.",
+                createdAt: "2024-01-27T10:45:00Z",
+                category: "jewelry"
+            },
+            {
+                id: 24,
+                name: "Smart Home Speaker",
+                location: "Hard Goods",
+                image: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=400&h=300&fit=crop",
+                owner: "all",
+                coverImage: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop"
+                ],
+                department: "tech",
+                quantity: 26,
+                remarks: "Voice-controlled smart speaker with AI assistant. Premium sound quality. Compatible with all smart devices.",
+                createdAt: "2024-01-06T15:30:00Z",
+                category: "electronics"
+            },
+            {
+                id: 25,
+                name: "Cashmere Winter Sweater",
+                location: "Factory",
+                image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=300&fit=crop",
+                owner: "mine",
+                coverImage: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=600&fit=crop",
+                images: [
+                    "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1564584217132-2271339fa2d6?w=400&h=300&fit=crop"
+                ],
+                department: "production",
+                quantity: 16,
+                remarks: "Luxurious cashmere sweater collection. Ultra-soft material. Available in multiple colors and sizes.",
+                createdAt: "2024-01-29T08:50:00Z",
+                category: "clothing"
+            }
+        ];
+            
+        // Pagination variables
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // Current filter state
+        let currentTab = 'mine';
+        let currentFilter = 'all';
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            renderProducts();
+            renderPagination();
+        });
+
+        // Function to render products based on current filters and pagination
+        function renderProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+
+            // Filter products based on current tab and category filter
+            let filteredProducts = demoProducts.filter(product => {
+                const tabMatch = currentTab === 'all' || product.owner === currentTab;
+                const categoryMatch = currentFilter === 'all' || product.category === currentFilter;
+                return tabMatch && categoryMatch;
+            });
+
+            // Calculate pagination
+            totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+            // Generate HTML for current page products
+            productsGrid.innerHTML = currentProducts.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    </div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-location">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        ${product.location}
+                    </div>
+                </div>
+            `).join('');
+
+            // Update pagination
+            renderPagination();
+        }
+
+        // Function to render pagination controls
+        function renderPagination() {
+            const paginationContainer = document.getElementById('paginationContainer');
+
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // Previous button
+            paginationHTML += `
+                <button class="pagination-button" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            // Adjust start page if we're near the end
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            // First page and ellipsis if needed
+            if (startPage > 1) {
+                paginationHTML += `<button class="pagination-button" onclick="changePage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="pagination-info">...</span>`;
+                }
+            }
+
+            // Page number buttons
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-button ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            // Last page and ellipsis if needed
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="pagination-info">...</span>`;
+                }
+                paginationHTML += `<button class="pagination-button" onclick="changePage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // Next button
+            paginationHTML += `
+                <button class="pagination-button" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+
+            // Page info
+            const filteredProducts = demoProducts.filter(product => {
+                const tabMatch = currentTab === 'all' || product.owner === currentTab;
+                const categoryMatch = currentFilter === 'all' || product.category === currentFilter;
+                return tabMatch && categoryMatch;
+            });
+
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, filteredProducts.length);
+
+            paginationHTML += `
+                <div class="pagination-info">
+                    ${startItem}-${endItem} of ${filteredProducts.length}
+                </div>
+            `;
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Function to change page
+        function changePage(page) {
+            if (page < 1 || page > totalPages) return;
+
+            currentPage = page;
+            renderProducts();
+
+            // Scroll to top of products section
+            document.querySelector('.products-section').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Function to switch between Mine and All tabs
+        function switchTab(tab) {
+            // Update current tab state
+            currentTab = tab;
+            currentPage = 1; // Reset to first page when switching tabs
+
+            // Update active tab button styling
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Re-render products with new filter
+            renderProducts();
+
+            console.log(`Switched to ${tab} tab`);
+        }
+
+        // Function to toggle filter dropdown (placeholder for actual dropdown)
+        function toggleFilter() {
+            alert('Filter feature here - TBD');
+        }
+
+        // Function to handle search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+
+            if (searchTerm) {
+                console.log(`Searching for: ${searchTerm}`);
+                // Here you would implement actual search logic
+                alert(`Search functionality for "${searchTerm}" would be implemented here!`);
+            } else {
+                alert('Please enter a search term');
+            }
+        }
+
+        // Function to handle search icon click (expand if collapsed, search if expanded)
+        function handleSearchIconClick() {
+            const searchContainer = document.getElementById('searchContainer');
+
+            if (window.innerWidth <= 768 && searchContainer.classList.contains('collapsed')) {
+                // If collapsed, expand it
+                expandSearch();
+                // Focus on the search input after expansion
+                setTimeout(() => {
+                    document.getElementById('searchInput').focus();
+                }, 300);
+            } else {
+                // If not collapsed or on desktop, perform search
+                performSearch();
+            }
+        }
+
+        // Function to handle profile icon click
+        function openProfile() {
+            console.log('Opening user profile');
+            alert('Profile page - name, dept, email - TBD');
+        }
+
+        // Function to handle product card click
+        function viewProduct(productId) {
+            const product = demoProducts.find(p => p.id === productId);
+            
+            if (product) {
+                console.log('Viewing product:', product);
+                
+                // Store complete product data in sessionStorage
+                sessionStorage.setItem('currentProduct', JSON.stringify(product));
+                
+                // Navigate to ProductDisplayPage with simple URL parameters
+                const params = new URLSearchParams({
+                    id: product.id,
+                    name: product.name
+                });
+                
+                window.location.href = `ProductDisplayPage.html?${params.toString()}`;
+            } else {
+                console.error('Product not found:', productId);
+                alert('Product not found');
+            }
+        }
+
+        // Function to handle add new product button
+        function addNewProduct() {
+            console.log('Navigating to add new product page');
+            window.location.href = 'AddNewProduct.html';
+        }
+
+        // Function to handle camera button - updated to actually open camera
+        async function openCamera() {
+            try {
+                // Check if browser supports camera access
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert('Camera access is not supported in this browser');
+                    return;
+                }
+
+                // Create video element for camera preview
+                const videoElement = document.createElement('video');
+                videoElement.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    object-fit: cover;
+                    z-index: 9999;
+                    background: black;
+                `;
+                videoElement.autoplay = true;
+                videoElement.playsInline = true;
+
+                // Create close button
+                const closeButton = document.createElement('button');
+                closeButton.innerHTML = '<i class="fas fa-times"></i>';
+                closeButton.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    background: rgba(0,0,0,0.7);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    font-size: 20px;
+                    cursor: pointer;
+                `;
+
+                // Create capture button
+                const captureButton = document.createElement('button');
+                captureButton.innerHTML = '<i class="fas fa-camera"></i>';
+                captureButton.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 10000;
+                    background: #667eea;
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 70px;
+                    height: 70px;
+                    font-size: 24px;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                `;
+
+                // Create camera flip button (for mobile devices with multiple cameras)
+                const flipButton = document.createElement('button');
+                flipButton.innerHTML = '<i class="fas fa-sync-alt"></i>';
+                flipButton.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    right: 30px;
+                    z-index: 10000;
+                    background: rgba(0,0,0,0.7);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    font-size: 16px;
+                    cursor: pointer;
+                `;
+
+                // Camera mode state
+                let currentFacingMode = 'environment'; // Start with back camera
+                let currentStream = null;
+
+                // Function to start camera with specific facing mode
+                async function startCamera(facingMode) {
+                    try {
+                        // Stop current stream if exists
+                        if (currentStream) {
+                            currentStream.getTracks().forEach(track => track.stop());
+                        }
+
+                        // Request camera access
+                        currentStream = await navigator.mediaDevices.getUserMedia({
+                            video: {
+                                facingMode: facingMode // 'environment' for back camera, 'user' for front camera
+                            }
+                        });
+
+                        // Set video source
+                        videoElement.srcObject = currentStream;
+                        return currentStream;
+                    } catch (error) {
+                        // If specific camera fails, try without facingMode restriction
+                        try {
+                            currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                            videoElement.srcObject = currentStream;
+                            return currentStream;
+                        } catch (fallbackError) {
+                            throw fallbackError;
+                        }
+                    }
+                }
+
+                // Start initial camera
+                const stream = await startCamera(currentFacingMode);
+
+                // Add elements to page
+                document.body.appendChild(videoElement);
+                document.body.appendChild(closeButton);
+                document.body.appendChild(captureButton);
+                document.body.appendChild(flipButton);
+
+                // Close camera function
+                function closeCamera() {
+                    if (currentStream) {
+                        currentStream.getTracks().forEach(track => track.stop());
+                    }
+                    document.body.removeChild(videoElement);
+                    document.body.removeChild(closeButton);
+                    document.body.removeChild(captureButton);
+                    document.body.removeChild(flipButton);
+                }
+
+                // Flip camera function
+                async function flipCamera() {
+                    try {
+                        currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+                        await startCamera(currentFacingMode);
+                    } catch (error) {
+                        console.error('Error flipping camera:', error);
+                        alert('Unable to switch camera');
+                    }
+                }
+
+                // Capture photo function
+                function capturePhoto() {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+
+                    context.drawImage(videoElement, 0, 0);
+
+                    // Convert to blob and download
+                    canvas.toBlob((blob) => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `photo_${new Date().getTime()}.jpg`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    }, 'image/jpeg', 0.9);
+
+                    // Show success feedback
+                    captureButton.style.background = '#10b981';
+                    captureButton.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        captureButton.style.background = '#667eea';
+                        captureButton.innerHTML = '<i class="fas fa-camera"></i>';
+                    }, 1000);
+                }
+
+                // Add event listeners
+                closeButton.addEventListener('click', closeCamera);
+                captureButton.addEventListener('click', capturePhoto);
+                flipButton.addEventListener('click', flipCamera);
+
+                // Close on escape key
+                const escapeHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        closeCamera();
+                        document.removeEventListener('keydown', escapeHandler);
+                    }
+                };
+                document.addEventListener('keydown', escapeHandler);
+
+                console.log('Camera opened successfully');
+
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+
+                if (error.name === 'NotAllowedError') {
+                    alert('Camera access denied. Please allow camera permissions and try again.');
+                } else if (error.name === 'NotFoundError') {
+                    alert('No camera found on this device.');
+                } else if (error.name === 'NotSupportedError') {
+                    alert('Camera is not supported on this device/browser.');
+                } else {
+                    alert('Unable to access camera. Please check your browser permissions and try again.');
+                }
+            }
+        }
+
+        // Add search functionality on Enter key press
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Voice recording functionality
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingStartTime;
+        let timerInterval;
+
+        // Function to toggle voice recording with proper state management
+        function toggleVoiceRecording() {
+            if (!isRecording) {
+                startVoiceRecording();
+            } else {
+                stopVoiceRecording();
+            }
+        }
+
+        // Mobile UI State Management
+        let isMobileViewActive = false;
+
+        // Function to check if mobile view is active
+        function isMobileView() {
+            return window.innerWidth <= 768;
+        }
+
+        // Function to reset mobile states
+        function resetMobileStates() {
+            if (!isMobileView()) return;
+
+            const voiceContainer = document.getElementById('voiceRecorderContainer');
+            const searchContainer = document.getElementById('searchContainer');
+
+            // Remove all state classes
+            voiceContainer.classList.remove('expanded', 'collapsed');
+            searchContainer.classList.remove('expanded', 'collapsed');
+        }
+
+        // Function to expand voice recorder on mobile
+        function expandVoiceRecorder() {
+            if (!isMobileView()) return;
+
+            const voiceContainer = document.getElementById('voiceRecorderContainer');
+            const searchContainer = document.getElementById('searchContainer');
+
+            // Clean state and apply new classes
+            resetMobileStates();
+
+            voiceContainer.classList.add('expanded');
+            searchContainer.classList.add('collapsed');
+        }
+
+        // Function to collapse voice recorder on mobile
+        function collapseVoiceRecorder() {
+            if (!isMobileView()) return;
+
+            setTimeout(() => {
+                if (!isRecording) { // Only collapse if not recording
+                    resetMobileStates();
+                }
+            }, 300);
+        }
+
+        // Function to expand search on mobile
+        function expandSearch() {
+            if (!isMobileView()) return;
+
+            const voiceContainer = document.getElementById('voiceRecorderContainer');
+            const searchContainer = document.getElementById('searchContainer');
+
+            // Clean state and apply new classes
+            resetMobileStates();
+
+            searchContainer.classList.add('expanded');
+            voiceContainer.classList.add('collapsed');
+        }
+
+        // Function to collapse search on mobile
+        function collapseSearch() {
+            if (!isMobileView()) return;
+
+            setTimeout(() => {
+                resetMobileStates();
+            }, 150);
+        }
+
+        // Function to handle search icon click (expand if collapsed, search if expanded)
+        function handleSearchIconClick() {
+            const searchContainer = document.getElementById('searchContainer');
+
+            if (isMobileView() && searchContainer.classList.contains('collapsed')) {
+                expandSearch();
+                setTimeout(() => {
+                    document.getElementById('searchInput').focus();
+                }, 350);
+            } else {
+                performSearch();
+            }
+        }
+
+        // Handle window resize to reset states
+        window.addEventListener('resize', function () {
+            if (!isMobileView()) {
+                resetMobileStates();
+            }
+        });
+
+        // Function to toggle mobile profile sidebar
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mobileProfileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.querySelector('.hamburger-menu');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        }
+
+        // Function to close mobile profile sidebar
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('mobileProfileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.querySelector('.hamburger-menu');
+
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+            hamburger.classList.remove('active');
+        }
+
+        // Function to open notifications
+        function openNotifications() {
+            console.log('Opening notifications');
+            alert('Notifications page - TBD');
+            closeMobileSidebar();
+        }
+
+        // Function to open help
+        function openHelp() {
+            console.log('Opening help');
+            alert('Help & Support page - TBD');
+            closeMobileSidebar();
+        }
+
+        // Function to open settings
+        function openSettings() {
+            console.log('Opening settings');
+            alert('Settings page - TBD');
+            closeMobileSidebar();
+        }
+
+        // Function to logout
+        function logout() {
+            console.log('Logout clicked');
+            alert('Logout feature to be implemented - TBD');
+            closeMobileSidebar();
+        }
+
+        // Close sidebar when clicking outside or pressing escape
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeMobileSidebar();
+            }
+        });
+
+        // Function to start voice recording
+        async function startVoiceRecording() {
+            try {
+                // Check if browser supports MediaRecorder
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert('Voice recording is not supported in this browser');
+                    return;
+                }
+
+                // Request microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                // Initialize MediaRecorder
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                // Set up event handlers
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+
+                    // Here you would typically send the audio to your server for processing
+                    console.log('Recording completed:', audioUrl);
+
+                    // Stop all audio tracks to release microphone
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                // Start recording
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+
+                // Update UI and expand voice recorder
+                updateRecordingUI();
+                expandVoiceRecorder();
+                startRecordingTimer();
+
+                console.log('Voice recording started');
+
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Unable to access microphone. Please check your browser permissions.');
+            }
+        }
+
+        // Function to stop voice recording
+        function stopVoiceRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+
+                // Update UI and collapse voice recorder
+                updateRecordingUI();
+                clearInterval(timerInterval);
+                collapseVoiceRecorder();
+
+                console.log('Voice recording stopped');
+            }
+        }
+
+        // Function to update recording UI
+        function updateRecordingUI() {
+            const voiceBtn = document.getElementById('voiceRecorderBtn');
+            const voiceIcon = document.getElementById('voiceIcon');
+            const voiceText = document.getElementById('voiceText');
+
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceIcon.className = 'fas fa-stop voice-icon';
+                voiceText.textContent = 'Stop Recording';
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceIcon.className = 'fas fa-microphone voice-icon';
+                voiceText.textContent = 'Voice Search';
+                document.getElementById('recordingTimer').textContent = '00:00';
+            }
+        }
+
+        // Function to start recording timer
+        function startRecordingTimer() {
+            timerInterval = setInterval(() => {
+                if (isRecording) {
+                    const elapsedTime = Date.now() - recordingStartTime;
+                    const seconds = Math.floor(elapsedTime / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const displaySeconds = seconds % 60;
+
+                    const timeString = `${minutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
+                    document.getElementById('recordingTimer').textContent = timeString;
+
+                    // Auto-stop after 5 minutes
+                    if (seconds >= 300) {
+                        stopVoiceRecording();
+                        alert('Recording automatically stopped after 5 minutes');
+                    }
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

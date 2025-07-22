@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Universal QR</title>
+    
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Internal CSS styles for the product display page -->
+    <style>
+        /* Reset default margins and padding, set font family */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body styling with light background */
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Full screen container with slight edge padding */
+        .page-container {
+            width: 100vw;
+            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Header container styling */
+        .header {
+            background: white;
+            padding: 20px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Back button styling */
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #f1f5f9;
+            border-color: #9ca3af;
+            color: #111827;
+        }
+
+        .back-button i {
+            font-size: 14px;
+        }
+
+        /* Main content container */
+        .main-content {
+            width: 100%;
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Product name header */
+        .product-name-header {
+            margin-bottom: 35px;
+        }
+
+        /* Product details container */
+        .product-details {
+            margin-bottom: 30px;
+        }
+
+        /* Product layout - left info, right images */
+        .product-layout {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        /* Product info section - left side */
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            min-width: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Image section - right side */
+        .product-image-section {
+            flex: 0 0 450px;
+            position: sticky;
+            top: 100px;
+        }
+
+        /* Image grid container */
+        .image-grid-container {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            max-width: 350px;
+        }
+
+        .image-grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .image-grid-title i {
+            color: #3b82f6;
+            font-size: 14px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 300px;
+        }
+
+        .image-grid-item {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        .image-grid-item:hover {
+            transform: scale(1.03);
+            border-color: #3b82f6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .image-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .image-grid-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .image-grid-item .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-grid-item:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .image-overlay i {
+            color: white;
+            font-size: 16px;
+        }
+
+        .no-images {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .no-images i {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Product name */
+        .product-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        /* Combined image slider container */
+        .combined-image-slider {
+            width: 100%;
+            height: 450px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            background: #f8fafc;
+        }
+
+        .combined-slider-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            cursor: pointer;
+        }
+
+        .combined-slider-image.active {
+            opacity: 1;
+        }
+
+        .combined-slider-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .combined-slider-button:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .combined-slider-button.prev {
+            left: 20px;
+        }
+
+        .combined-slider-button.next {
+            right: 20px;
+        }
+
+        .combined-slider-button i {
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .combined-slider-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .combined-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .combined-indicator.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .combined-indicator:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Image counter */
+        .image-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 20;
+        }
+
+        /* Info grid for details */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-icon {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Department badge styling */
+        .department-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            color: #374151;
+            padding: 8px 14px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .department-badge:hover {
+            background: #f1f5f9;
+            border-color: #d1d5db;
+            transform: scale(1.02);
+        }
+
+        .department-badge i {
+            color: #2563eb;
+        }
+
+        /* Quantity styling */
+        .quantity-display {
+            background: #f8fafc;
+            color: #374151;
+            padding: 8px 14px;
+            border-radius: 25px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-display:hover {
+            background: #f1f5f9;
+            border-color: #d1d5db;
+            transform: scale(1.02);
+        }
+
+        .quantity-display i {
+            color: #2563eb;
+        }
+
+        /* Location and date value styling */
+        .location-value, .date-value {
+            background: #f8fafc;
+            color: #374151;
+            padding: 8px 14px;
+            border-radius: 25px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .location-value:hover, .date-value:hover {
+            background: #f1f5f9;
+            border-color: #d1d5db;
+            transform: scale(1.02);
+        }
+
+        .location-value i, .date-value i {
+            color: #2563eb;
+        }
+
+        /* Remarks section */
+        .remarks-section {
+            margin-top: 24px;
+        }
+
+        .add-remark-section {
+            margin-bottom: 24px;
+            margin-top: 16px;
+        }
+
+        .add-remark-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .add-remark-btn:hover {
+            background: #2563eb;
+        }
+
+        .remark-form {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .remark-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .remark-form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .save-remark-btn, .cancel-remark-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .save-remark-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+        }
+
+        .save-remark-btn:hover {
+            background: #059669;
+        }
+
+        .cancel-remark-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .cancel-remark-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .remarks-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remarks-title i {
+            color: #3b82f6;
+        }
+
+        .remarks-content {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .remarks-author {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+            text-align: right;
+        }
+
+        .no-remarks {
+            font-style: italic;
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Product images section */
+        .product-images-section {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #6b7280;
+            font-size: 18px;
+        }
+
+        /* Hide old image slider styles - we're using combined slider now */
+        .image-slider-container,
+        .image-slider,
+        .slider-image,
+        .slider-button,
+        .slider-indicators,
+        .indicator {
+            display: none !important;
+        }
+
+        /* Image modal */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .image-modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .image-modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Loading state */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: #6b7280;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Error state */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: #ef4444;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            font-size: 16px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 0;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .back-button span {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .product-name {
+                font-size: 24px;
+            }
+
+            .product-layout {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .product-image-section {
+                flex: none;
+                width: 100%;
+                position: static;
+                order: 1;
+            }
+
+            .product-info {
+                order: 2;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                max-width: 280px;
+            }
+
+            .image-grid-container {
+                padding: 12px;
+                max-width: 320px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .info-value {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px 10px;
+            }
+
+            .product-name {
+                font-size: 20px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+                max-width: 250px;
+            }
+
+            .image-grid-container {
+                padding: 10px;
+                max-width: 280px;
+            }
+
+            .image-grid-title {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Full screen page container with edge padding -->
+    <div class="page-container">
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Loading state -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading product details...</div>
+            </div>
+
+            <!-- Error state -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <i class="fas fa-exclamation-triangle error-icon"></i>
+                <div class="error-title">Product Not Found</div>
+                <div class="error-message">The product you're looking for could not be found or may have been removed.</div>
+            </div>
+
+            <!-- Product details container -->
+            <div class="product-details" id="productDetails" style="display: none;">
+                <!-- Product name header -->
+                <div class="product-name-header">
+                    <h1 class="product-name" id="productName">Loading...</h1>
+                </div>
+
+                <!-- Main product layout -->
+                <div class="product-layout">
+                    <!-- Product info section - left side -->
+                    <div class="product-info">
+                        <!-- Info grid -->
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Department</div>
+                                <div class="department-badge" id="productDepartment">
+                                    <i class="fas fa-building"></i>
+                                    <span id="departmentText">Loading...</span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Quantity</div>
+                                <div class="quantity-display" id="productQuantity">
+                                    <i class="fas fa-warehouse"></i>
+                                    <span id="quantityText">0</span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Location</div>
+                                <div class="location-value" id="productLocation">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="locationText">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Remarks section -->
+                        <div class="remarks-section">
+                            <!-- Add remark section at top -->
+                            <div class="add-remark-section">
+                                <button class="add-remark-btn" onclick="toggleRemarkForm()">
+                                    <i class="fas fa-plus"></i> Add Remark
+                                </button>
+                                
+                                <div class="remark-form" id="remarkForm">
+                                    <textarea class="remark-textarea" id="remarkTextarea" placeholder="Add your remark here..."></textarea>
+                                    <div class="remark-form-buttons">
+                                        <button class="save-remark-btn" onclick="saveRemark()">
+                                            <i class="fas fa-save"></i> Save
+                                        </button>
+                                        <button class="cancel-remark-btn" onclick="cancelRemark()">
+                                            <i class="fas fa-times"></i> Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Previous remarks section -->
+                            <div class="remarks-title">
+                                <i class="fas fa-comment-alt"></i>
+                                Previous Remarks
+                            </div>
+                            
+                            <div class="remarks-content" id="productRemarks">
+                                <span class="no-remarks">No remarks provided</span>
+                            </div>
+                            <div class="remarks-author" id="remarksAuthor" style="display: none;">
+                                Added by: <span id="authorName">Unknown User</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image grid section - right side -->
+                    <div class="product-image-section">
+                        <div class="image-grid-container">
+                            <div class="image-grid-title">
+                                <i class="fas fa-images"></i>
+                                Product Images
+                            </div>
+                            <div class="image-grid" id="imageGrid">
+                                <!-- Images will be dynamically loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
+        <img id="modalImage" src="" alt="Image preview">
+        <button class="image-modal-close" onclick="closeImageModal()" title="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript for dynamic product display -->
+    <script>
+        let currentProduct = null;
+        let currentSlideIndex = 0;
+        let totalSlides = 0;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductFromURL();
+        });
+
+        // Function to load product data from URL parameters
+        function loadProductFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const productName = urlParams.get('name');
+            
+            console.log('Loading product with ID:', productId, 'Name:', productName);
+            
+            if (productId) {
+                // Get complete product data from sessionStorage
+                const storedProduct = sessionStorage.getItem('currentProduct');
+                console.log('Stored product data:', storedProduct);
+                
+                if (storedProduct) {
+                    try {
+                        const product = JSON.parse(storedProduct);
+                        console.log('Parsed product:', product);
+                        console.log('Product ID match check:', product.id, '==', productId, ':', product.id == productId);
+                        
+                        // Verify this is the correct product (convert both to string for comparison)
+                        if (String(product.id) === String(productId)) {
+                            displayProduct(product);
+                            return;
+                        } else {
+                            console.error('Product ID mismatch - stored:', product.id, 'requested:', productId);
+                        }
+                    } catch (error) {
+                        console.error('Error parsing stored product data:', error);
+                    }
+                } else {
+                    console.error('No stored product data found');
+                }
+            } else {
+                console.error('No product ID in URL');
+            }
+            
+            // If we get here, show error
+            showError();
+        }
+
+        // Function to display product information
+        function displayProduct(product) {
+            currentProduct = product;
+            
+            // Hide loading and show product details
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('productDetails').style.display = 'block';
+
+            // Set product name
+            document.getElementById('productName').textContent = product.name || 'Unknown Product';
+
+            // Set department
+            const departmentText = document.getElementById('departmentText');
+            departmentText.textContent = formatDepartment(product.department || 'Unknown');
+
+            // Set quantity
+            const quantityText = document.getElementById('quantityText');
+            quantityText.textContent = `${product.quantity || 0} items`;
+
+            // Set location
+            const locationText = document.getElementById('locationText');
+            locationText.textContent = product.location || 'Unknown Location';
+
+            // Set remarks
+            const remarksContent = document.getElementById('productRemarks');
+            const remarksAuthor = document.getElementById('remarksAuthor');
+            const authorName = document.getElementById('authorName');
+            
+            // Check if we have multiple remarks or just the old single remark format
+            if (product.remarksList && product.remarksList.length > 0) {
+                // Display multiple remarks
+                let remarksHtml = '';
+                product.remarksList.forEach((remark, index) => {
+                    const borderColor = remark.author === 'You' ? '#10b981' : '#3b82f6';
+                    remarksHtml += `
+                        <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                            <div style="font-size: 14px; color: #374151; margin-bottom: 8px; line-height: 1.5;">${remark.text}</div>
+                            <div style="font-size: 11px; color: #64748b; font-style: italic; text-align: right;">Added by ${remark.author} on ${remark.timestamp}</div>
+                        </div>
+                    `;
+                });
+                remarksContent.innerHTML = remarksHtml;
+                remarksAuthor.style.display = 'none';
+            } else if (product.remarks && product.remarks.trim()) {
+                // Display single old-format remark
+                remarksContent.innerHTML = `
+                    <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 14px; color: #374151; margin-bottom: 8px; line-height: 1.5;">${product.remarks}</div>
+                        <div style="font-size: 11px; color: #64748b; font-style: italic; text-align: right;">Added by ${getRandomAuthor()}</div>
+                    </div>
+                `;
+                remarksAuthor.style.display = 'none';
+            } else {
+                // No remarks
+                remarksContent.innerHTML = '<span class="no-remarks">No remarks provided</span>';
+                remarksAuthor.style.display = 'none';
+            }
+
+            // Display images in grid format
+            displayImageGrid(product);
+
+            console.log('Product displayed:', product);
+        }
+
+        // Function to display images in grid format
+        function displayImageGrid(product) {
+            const imageGrid = document.getElementById('imageGrid');
+            
+            // Collect all images - cover image first, then product images
+            let allImages = [];
+            
+            // Add cover image if exists
+            if (product.coverImage) {
+                allImages.push(product.coverImage);
+            }
+            
+            // Add product images if exist
+            if (product.images && product.images.length > 0) {
+                // Only add product images that are different from cover image
+                product.images.forEach(img => {
+                    if (img !== product.coverImage) {
+                        allImages.push(img);
+                    }
+                });
+            }
+            
+            // Clear existing content
+            imageGrid.innerHTML = '';
+            
+            if (allImages.length === 0) {
+                // Show no images message
+                imageGrid.innerHTML = `
+                    <div class="no-images" style="grid-column: 1 / -1;">
+                        <i class="fas fa-image"></i>
+                        <div>No images available</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Add each image to grid
+            allImages.forEach((imageSrc, index) => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-grid-item';
+                imageItem.onclick = () => openImageModal(imageSrc);
+                
+                imageItem.innerHTML = `
+                    <img src="${imageSrc}" alt="Product Image ${index + 1}" loading="lazy">
+                    <div class="image-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                `;
+                
+                imageGrid.appendChild(imageItem);
+            });
+        }
+
+        // Function to format department names
+        function formatDepartment(department) {
+            const departmentMap = {
+                'sampling': 'Sampling',
+                'production': 'Production',
+                'tech': 'Technology',
+                'front desk': 'Front Desk',
+                'hard goods': 'Hard Goods'
+            };
+            
+            return departmentMap[department.toLowerCase()] || department;
+        }
+
+        // Function to get random author name
+        function getRandomAuthor() {
+            const authors = ['John Smith', 'Sarah Johnson', 'Mike Chen', 'Emily Davis', 'David Wilson'];
+            return authors[Math.floor(Math.random() * authors.length)];
+        }
+
+        // Function to toggle remark form
+        function toggleRemarkForm() {
+            const remarkForm = document.getElementById('remarkForm');
+            const addBtn = document.querySelector('.add-remark-btn');
+            
+            if (remarkForm.style.display === 'none' || remarkForm.style.display === '') {
+                remarkForm.style.display = 'block';
+                addBtn.style.display = 'none';
+                document.getElementById('remarkTextarea').focus();
+            } else {
+                remarkForm.style.display = 'none';
+                addBtn.style.display = 'block';
+            }
+        }
+
+        // Function to save remark
+        function saveRemark() {
+            const textarea = document.getElementById('remarkTextarea');
+            const remarkText = textarea.value.trim();
+            
+            if (remarkText) {
+                const remarksContent = document.getElementById('productRemarks');
+                
+                // Add new remark
+                const currentTime = new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const newRemarkHtml = `
+                    <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #10b981; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 14px; color: #374151; margin-bottom: 8px; line-height: 1.5;">${remarkText}</div>
+                        <div style="font-size: 11px; color: #64748b; font-style: italic; text-align: right;">Added by You on ${currentTime}</div>
+                    </div>
+                `;
+                
+                // Check if there are existing remarks
+                if (remarksContent.querySelector('.no-remarks')) {
+                    // Replace "no remarks" message with the new remark
+                    remarksContent.innerHTML = newRemarkHtml;
+                } else {
+                    // Add new remark at the top, keeping existing remarks below
+                    remarksContent.innerHTML = newRemarkHtml + remarksContent.innerHTML;
+                }
+                
+                // Clear textarea and hide form
+                textarea.value = '';
+                cancelRemark();
+                
+                // Initialize or update product remarks array
+                if (currentProduct) {
+                    if (!currentProduct.remarksList) {
+                        currentProduct.remarksList = [];
+                    }
+                    currentProduct.remarksList.unshift({
+                        text: remarkText,
+                        author: 'You',
+                        timestamp: currentTime
+                    });
+                    sessionStorage.setItem('currentProduct', JSON.stringify(currentProduct));
+                }
+            }
+        }
+
+        // Function to cancel remark
+        function cancelRemark() {
+            const remarkForm = document.getElementById('remarkForm');
+            const addBtn = document.querySelector('.add-remark-btn');
+            const textarea = document.getElementById('remarkTextarea');
+            
+            remarkForm.style.display = 'none';
+            addBtn.style.display = 'block';
+            textarea.value = '';
+        }
+
+        // Function to show error state
+        function showError() {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('productDetails').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'flex';
+        }
+
+        // Function to open image modal
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.style.display = 'flex';
+            
+            // Prevent body scrolling when modal is open
+            document.body.style.overflow = 'hidden';
+            
+            // Add escape key listener
+            document.addEventListener('keydown', handleModalEscape);
+        }
+
+        // Function to close image modal
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+            
+            // Remove escape key listener
+            document.removeEventListener('keydown', handleModalEscape);
+        }
+
+        // Function to handle modal escape key
+        function handleModalEscape(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        }
+
+        // Function to go back to previous page
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Fallback to index page
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', function(event) {
+            // Handle back navigation if needed
+            console.log('Navigation detected');
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            // Clean up any stored data if needed
+            sessionStorage.removeItem('currentProduct');
+        });
+    </script>
+</body>
+</html>

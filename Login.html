@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Universal QR</title>
+    
+    <!-- Internal CSS styles for the login page -->
+    <style>
+        /* Reset default margins and padding, set font family */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body styling with gradient background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%,  100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main container for the login form */
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        /* Header styling inside the login container */
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Form group styling for input containers */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Label styling for input fields */
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Input field styling */
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        /* Input field focus effect */
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Login button styling */
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgb(163, 163, 223);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+
+        /* Login button hover effect */
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Container for additional action links */
+        .login-footer {
+            text-align: center;
+        }
+
+        /* Styling for forgot password and reset links */
+        .login-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        /* Link hover effect */
+        .login-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* Divider styling between links */
+        .divider {
+            color: #ccc;
+            margin: 0 10px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px;
+            }
+            
+            .login-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main login container -->
+    <div class="login-container">
+        <!-- Login page header with title and subtitle -->
+        <div class="login-header">
+            <h1>Universal QR</h1>
+            <p>Please login to your account</p>
+        </div>
+
+        <!-- Login form starts here -->
+        <form id="loginForm" action="#" method="POST">
+            <!-- Email input field group -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter your email address"
+                    required
+                >
+            </div>
+
+            <!-- Password input field group -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <!-- Login submit button -->
+            <button type="submit" class="login-btn">
+                 Login
+            </button>
+        </form>
+
+        <!-- Footer section with additional action links -->
+        <div class="login-footer">
+            <!-- Forgot password link -->
+            <a href="#" onclick="handleForgotPassword()">Forgot Password?</a>
+            
+            <!-- Divider between links -->
+            <span class="divider">|</span>
+            
+            <!-- Reset password link -->
+            <a href="#" onclick="handleResetPassword()">Reset Password</a>
+        </div>
+    </div>
+
+    <!-- JavaScript for form handling and button actions -->
+    <script>
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            // Get form data
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Here you would typically send the data to your server
+            console.log('Login attempt:', { email, password });
+            
+            window.location.href = 'index.html' ; 
+        });
+
+        // Handle forgot password link click
+        function handleForgotPassword() {
+            // This function would typically redirect to a forgot password page
+            // or show a modal for password recovery
+            alert('Forgot Password feature - TBD');
+        }
+
+        // Handle reset password link click
+        function handleResetPassword() {
+            // This function would typically redirect to a password reset page
+            // or show a modal for password reset
+            alert('Reset Password feature - TBD');
+        }
+    </script>
+</body>
+</html>
