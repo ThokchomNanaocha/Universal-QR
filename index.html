@@ -528,12 +528,19 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        /* Controls container for tabs and filter */
+        /* Controls container for tabs, filter and add button */
         .controls-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Right side controls (filter and add button) */
+        .right-controls {
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
 
@@ -596,6 +603,36 @@
             color: #667eea;
         }
 
+        /* Add New Product button styling */
+        .add-product-header-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+            min-height: 50px;
+        }
+
+        .add-product-header-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .add-product-header-btn i {
+            font-size: 16px;
+        }
+
         /* Products grid container */
         .products-grid {
             display: grid;
@@ -611,14 +648,14 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: box-shadow 0.2s, border 0.2s;
             cursor: pointer;
         }
 
         /* Product card hover effect */
         .product-card:hover {
-            transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 2px solid #87CEEB; /* Light blue outer ring */
         }
 
         /* Product image placeholder */
@@ -635,11 +672,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
         }
 
         /* Product name styling */
@@ -663,6 +695,27 @@
         /* Location icon styling */
         .location-icon {
             color: #667eea;
+        }
+
+        /* Product info container for location and department */
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Department badge styling */
+        .department-badge {
+            background: #6B7280;
+            color: white;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         /* Bottom action buttons container */
@@ -974,9 +1027,28 @@
                 gap: 10px;
             }
 
+            .right-controls {
+                gap: 10px;
+            }
+
             .tab-buttons {
                 justify-content: flex-start;
                 gap: 8px;
+            }
+
+            /* Mobile responsive for add product button */
+            .add-product-header-btn {
+                padding: 12px 16px;
+                font-size: 15px;
+                min-height: 45px;
+            }
+
+            .add-product-header-btn span {
+                display: none; /* Hide text on mobile, show only icon */
+            }
+
+            .add-product-header-btn i {
+                font-size: 18px; /* Larger icon on mobile to compensate for hidden text */
             }
 
             .tab-button {
@@ -1263,10 +1335,117 @@
                 white-space: nowrap;
             }
         }
+
+        /* Notification styles */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .notification {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification.hide {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+
+        .notification-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: opacity 0.2s ease;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile responsive notifications */
+        @media (max-width: 768px) {
+            .notification-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .notification {
+                transform: translateY(-100px);
+            }
+
+            .notification.show {
+                transform: translateY(0);
+            }
+
+            .notification.hide {
+                transform: translateY(-100px);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- Notification container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <!-- Full screen page container with edge padding -->
     <div class="page-container">
         <!-- Main header section with voice recorder, search and profile -->
@@ -1376,13 +1555,22 @@
                         </button>
                     </div>
 
-                    <!-- Filter dropdown -->
-                    <div class="filter-container">
-                        <div class="filter-dropdown" onclick="toggleFilter()">
-                            <i class="fas fa-filter filter-icon"></i>
-                            <span id="filterText">Filter</span>
-                            <i class="fas fa-chevron-down"></i>
+                    <!-- Right side controls: Filter and Add New Product -->
+                    <div class="right-controls">
+                        <!-- Filter dropdown -->
+                        <div class="filter-container">
+                            <div class="filter-dropdown" onclick="toggleFilter()">
+                                <i class="fas fa-filter filter-icon"></i>
+                                <span id="filterText">Filter</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
                         </div>
+
+                        <!-- Add New Product button -->
+                        <button class="add-product-header-btn" onclick="addNewProduct()">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New Product</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -1418,6 +1606,64 @@
 
     <!-- JavaScript for interactivity and demo data -->
     <script>
+        // Notification system
+        function showNotification(title, message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            // Set icon based on type
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            else if (type === 'warning') icon = 'fa-exclamation-triangle';
+            else if (type === 'error') icon = 'fa-times-circle';
+            else if (type === 'tab-switch') icon = 'fa-exchange-alt';
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="closeNotification(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Add to container
+            container.appendChild(notification);
+            
+            // Trigger show animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                hideNotification(notification);
+            }, 4000);
+            
+            return notification;
+        }
+
+        function hideNotification(notification) {
+            notification.classList.add('hide');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 400);
+        }
+
+        function closeNotification(closeButton) {
+            const notification = closeButton.closest('.notification');
+            hideNotification(notification);
+        }
+
         // Demo product data with complete information for detailed product pages
         const demoProducts = [
             {
@@ -1911,9 +2157,14 @@
                         <img src="${product.image}" alt="${product.name}" loading="lazy">
                     </div>
                     <div class="product-name">${product.name}</div>
-                    <div class="product-location">
-                        <i class="fas fa-map-marker-alt location-icon"></i>
-                        ${product.location}
+                    <div class="product-info">
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt location-icon"></i>
+                            ${product.location}
+                        </div>
+                        <div class="department-badge">
+                            ${product.department}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -2017,6 +2268,9 @@
 
         // Function to switch between Mine and All tabs
         function switchTab(tab) {
+            // Store previous tab for notification
+            const previousTab = currentTab;
+            
             // Update current tab state
             currentTab = tab;
             currentPage = 1; // Reset to first page when switching tabs
@@ -2031,6 +2285,22 @@
 
             // Re-render products with new filter
             renderProducts();
+
+            // Show notification for tab switch
+            if (previousTab !== tab) {
+                const tabDisplay = tab.charAt(0).toUpperCase() + tab.slice(1);
+                const productCount = demoProducts.filter(product => {
+                    const tabMatch = tab === 'all' || product.owner === tab;
+                    const categoryMatch = currentFilter === 'all' || product.category === currentFilter;
+                    return tabMatch && categoryMatch;
+                }).length;
+                
+                showNotification(
+                    `Switched to ${tabDisplay}`,
+                    `Now viewing ${productCount} products in ${tabDisplay} section`,
+                    'tab-switch'
+                );
+            }
 
             console.log(`Switched to ${tab} tab`);
         }

@@ -130,50 +130,49 @@
             width: 100%;
             background: white;
             border-radius: 12px;
-            padding: 16px;
+            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
             border: 1px solid #e2e8f0;
-            max-width: 350px;
         }
 
         .image-grid-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .image-grid-title i {
             color: #3b82f6;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .image-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 300px;
+            gap: 16px;
+            width: 100%;
         }
 
         .image-grid-item {
             aspect-ratio: 1;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
             position: relative;
             width: 100%;
             height: auto;
         }
 
         .image-grid-item:hover {
-            transform: scale(1.03);
+            transform: scale(1.05);
             border-color: #3b82f6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .image-grid-item img {
@@ -207,7 +206,7 @@
 
         .image-overlay i {
             color: white;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .no-images {
@@ -574,6 +573,42 @@
             padding: 20px;
         }
 
+        /* Download QR Button styling */
+        .download-qr-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .download-qr-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .download-qr-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .download-qr-btn i {
+            font-size: 16px;
+        }
+
         /* Product images section */
         .product-images-section {
             margin-top: 50px;
@@ -746,14 +781,12 @@
             }
 
             .image-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 6px;
-                max-width: 280px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
 
             .image-grid-container {
-                padding: 12px;
-                max-width: 320px;
+                padding: 16px;
             }
 
             .info-grid {
@@ -763,6 +796,14 @@
 
             .info-value {
                 font-size: 14px;
+            }
+
+            .download-qr-btn {
+                width: 100%;
+                max-width: none;
+                min-width: unset;
+                padding: 14px 20px;
+                font-size: 15px;
             }
         }
 
@@ -776,19 +817,17 @@
             }
 
             .image-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 5px;
-                max-width: 250px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
 
             .image-grid-container {
-                padding: 10px;
-                max-width: 280px;
+                padding: 12px;
             }
 
             .image-grid-title {
-                font-size: 14px;
-                margin-bottom: 10px;
+                font-size: 16px;
+                margin-bottom: 12px;
             }
         }
     </style>
@@ -848,6 +887,14 @@
                                     <span id="locationText">Loading...</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Download QR Code section -->
+                        <div class="download-qr-section">
+                            <button class="download-qr-btn" onclick="downloadQRCode()">
+                                <i class="fas fa-qrcode"></i>
+                                <span>Download QR Code</span>
+                            </button>
                         </div>
 
                         <!-- Remarks section -->
@@ -1175,6 +1222,11 @@
             remarkForm.style.display = 'none';
             addBtn.style.display = 'block';
             textarea.value = '';
+        }
+
+        // Function to download QR code
+        function downloadQRCode() {
+            alert('🚧 Feature under development.');
         }
 
         // Function to show error state

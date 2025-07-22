@@ -6,8 +6,8 @@
 - pwa 
 - add new product page ✅ 
 - update the product 
-- add new product button in larger screens 
-- download QR in product display page 
+- add new product button in larger screens ✅
+- download QR in product display page ✅
 - cover and normal image ✅
 - preview mode of image ✅
 - image dragged and paste 
