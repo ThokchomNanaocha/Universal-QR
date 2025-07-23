@@ -389,13 +389,6 @@
             font-weight: 600;
             border: 1px solid #e2e8f0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
-        }
-
-        .department-badge:hover {
-            background: #f1f5f9;
-            border-color: #d1d5db;
-            transform: scale(1.02);
         }
 
         .department-badge i {
@@ -415,13 +408,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .quantity-display:hover {
-            background: #f1f5f9;
-            border-color: #d1d5db;
-            transform: scale(1.02);
         }
 
         .quantity-display i {
@@ -441,13 +427,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .location-value:hover, .date-value:hover {
-            background: #f1f5f9;
-            border-color: #d1d5db;
-            transform: scale(1.02);
         }
 
         .location-value i, .date-value i {
@@ -658,7 +637,7 @@
             max-width: 90vw;
             max-height: 90vh;
             object-fit: contain;
-            border-radius: 10px;
+            border-radius: 0;
         }
 
         .image-modal-close {
@@ -1078,23 +1057,44 @@
         function displayImageGrid(product) {
             const imageGrid = document.getElementById('imageGrid');
             
-            // Collect all images - cover image first, then product images
+            console.log('=== DEBUG: Image Collection Process ===');
+            console.log('Product coverImage:', product.coverImage);
+            console.log('Product images array:', product.images);
+            
+            // Helper function to get base image URL without crop parameters
+            function getBaseImageUrl(url) {
+                if (!url) return '';
+                // Remove crop parameters like ?w=400&h=300&fit=crop
+                return url.split('?')[0];
+            }
+            
+            // Collect all unique images using Set to avoid duplicates
             let allImages = [];
             
-            // Add cover image if exists
-            if (product.coverImage) {
-                allImages.push(product.coverImage);
+            // Start with product images array if it exists
+            if (product.images && product.images.length > 0) {
+                allImages = [...product.images];
+                console.log('After adding product.images:', allImages);
             }
             
-            // Add product images if exist
-            if (product.images && product.images.length > 0) {
-                // Only add product images that are different from cover image
-                product.images.forEach(img => {
-                    if (img !== product.coverImage) {
-                        allImages.push(img);
-                    }
-                });
+            // Check if cover image is already represented in the images array (comparing base URLs)
+            const coverImageBase = getBaseImageUrl(product.coverImage);
+            const isAlreadyPresent = allImages.some(img => getBaseImageUrl(img) === coverImageBase);
+            
+            // If cover image exists and is not already represented, add it at the beginning
+            if (product.coverImage && !isAlreadyPresent) {
+                allImages.unshift(product.coverImage);
+                console.log('Added coverImage to beginning:', allImages);
+            } else if (product.coverImage) {
+                console.log('Cover image already exists in images array (base URL match), skipping...');
             }
+            
+            // Remove any duplicates using Set (extra safety)
+            const beforeDedup = [...allImages];
+            allImages = [...new Set(allImages)];
+            console.log('Before deduplication:', beforeDedup);
+            console.log('After deduplication:', allImages);
+            console.log('=== END DEBUG ===');
             
             // Clear existing content
             imageGrid.innerHTML = '';

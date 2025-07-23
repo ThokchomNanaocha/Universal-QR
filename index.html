@@ -7,7 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal QR - Products</title>
 
+    <!-- PWA Manifest -->
+
+    <link rel="manifest" href="manifest.json">
+
+    <!-- PWA Meta Tags -->
+
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Universal QR">
+
+    <!-- Apple Touch Icons - Simple QR icon with scanner lines -->
+
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23667eea'/><g fill='white'><rect x='20' y='20' width='40' height='40' rx='4'/><rect x='120' y='20' width='40' height='40' rx='4'/><rect x='20' y='120' width='40' height='40' rx='4'/><rect x='28' y='28' width='24' height='24' fill='%23667eea'/><rect x='128' y='28' width='24' height='24' fill='%23667eea'/><rect x='28' y='128' width='24' height='24' fill='%23667eea'/><rect x='75' y='20' width='4' height='20'/><rect x='85' y='20' width='4' height='20'/><rect x='95' y='20' width='4' height='20'/><rect x='75' y='50' width='4' height='20'/><rect x='95' y='50' width='4' height='20'/><rect x='140' y='75' width='20' height='4'/><rect x='140' y='85' width='20' height='4'/><rect x='140' y='95' width='20' height='4'/><line x1='10' y1='90' x2='170' y2='90' stroke='white' stroke-width='2' opacity='0.6'/></g></svg>">
+
+    <!-- Favicon - Simple Q letter with magnifying glass -->
+
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23667eea'/><circle cx='16' cy='14' r='6' fill='none' stroke='white' stroke-width='2'/><path d='M19 19l3 3' stroke='white' stroke-width='2' stroke-linecap='round'/></svg>">
+
     <!-- Font Awesome CDN for icons -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Internal CSS styles for the product display page -->
@@ -645,24 +668,24 @@
         /* Individual product card styling */
         .product-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.2s, border 0.2s;
             cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
         }
 
-        /* Product card hover effect */
+        /* Product card hover effect - simple border indication */
         .product-card:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 2px solid #87CEEB; /* Light blue outer ring */
+            border-color: #667eea;
         }
 
         /* Product image placeholder */
         .product-image {
             width: 100%;
             height: 220px;
-            border-radius: 8px;
+            border-radius: 0;
             margin-bottom: 15px;
             overflow: hidden;
             position: relative;
@@ -672,6 +695,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: none;
+            transform: none;
+        }
+
+        .product-image img:hover {
+            transform: none;
+            transition: none;
         }
 
         /* Product name styling */
@@ -721,56 +751,62 @@
         /* Bottom action buttons container */
         .bottom-actions {
             position: fixed;
-            bottom: 0;
+            bottom: 35px;
             left: 0;
             right: 0;
             background: white;
-            padding: 10px 20px 12px 20px;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 16px 12px 16px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.15);
             display: none !important;
             /* Force hidden on desktop */
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             z-index: 50;
-            width: 100vw;
+            border-radius: 0;
             border-top: 1px solid #e2e8f0;
         }
 
         /* Action button styling - more button-like */
         .action-button {
             display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            padding: 12px 20px;
-            border-radius: 25px;
+            padding: 8px 12px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             background: #667eea;
             color: white;
-            border: 2px solid #667eea;
+            border: none;
             font-weight: 600;
-            font-size: 14px;
-            min-width: 140px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+            font-size: 12px;
+            min-width: 120px;
+            flex: 1;
+            box-shadow: 0 2px 12px rgba(102, 126, 234, 0.25);
         }
 
         .action-button:hover {
             background: #5a6fd8;
-            border-color: #5a6fd8;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.35);
+        }
+
+        .action-button:active {
+            transform: translateY(0);
         }
 
         /* Action button icon styling */
         .action-icon {
-            font-size: 16px;
-            margin-right: 8px;
+            font-size: 14px;
+            margin-right: 6px;
         }
 
         /* Action button text styling */
         .action-text {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
+            line-height: 1.2;
         }
 
         /* Pagination container */
@@ -1036,19 +1072,9 @@
                 gap: 8px;
             }
 
-            /* Mobile responsive for add product button */
+            /* Mobile responsive for add product button - hide completely on mobile */
             .add-product-header-btn {
-                padding: 12px 16px;
-                font-size: 15px;
-                min-height: 45px;
-            }
-
-            .add-product-header-btn span {
-                display: none; /* Hide text on mobile, show only icon */
-            }
-
-            .add-product-header-btn i {
-                font-size: 18px; /* Larger icon on mobile to compensate for hidden text */
+                display: none;
             }
 
             .tab-button {
@@ -1072,8 +1098,8 @@
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
-                margin-bottom: 70px;
-                /* Reduced from 100px */
+                margin-bottom: 120px;
+                /* Increased to account for higher floating bottom actions */
             }
 
             /* Adjust main content padding */
@@ -1085,14 +1111,58 @@
             .bottom-actions {
                 display: flex !important;
                 /* Override desktop hidden state */
-                gap: 15px;
-                padding: 8px 15px 10px 15px;
+                gap: 10px;
+                padding: 8px 12px 10px 12px;
+                bottom: 30px;
+                left: 0;
+                right: 0;
             }
 
             .action-button {
-                min-width: 120px;
-                padding: 10px 16px;
-                font-size: 13px;
+                min-width: 100px;
+                padding: 6px 10px;
+                font-size: 11px;
+                border-radius: 10px;
+            }
+
+            /* Show both add product and camera buttons in mobile view */
+            .add-product-btn {
+                display: flex;
+                background: #60a5fa;
+                color: white;
+                border: 2px solid #60a5fa;
+            }
+
+            .add-product-btn:hover {
+                background: #3b82f6;
+                border-color: #3b82f6;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+            }
+
+            .camera-btn {
+                display: flex;
+                background: #60a5fa;
+                color: white;
+                border: 2px solid #60a5fa;
+            }
+
+            .camera-btn:hover {
+                background: #3b82f6;
+                border-color: #3b82f6;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+            }
+
+            /* Mobile action icon and text adjustments */
+            .action-icon {
+                font-size: 14px;
+                margin-right: 6px;
+            }
+
+            .action-text {
+                font-size: 12px;
+                font-weight: 600;
             }
 
             .action-icon {
@@ -1334,6 +1404,11 @@
                 margin: 0 6px;
                 white-space: nowrap;
             }
+
+            /* Hide add product header button in smaller mobile view too */
+            .add-product-header-btn {
+                display: none;
+            }
         }
 
         /* Notification styles */
@@ -1443,6 +1518,57 @@
 </head>
 
 <body>
+    <!-- IMMEDIATE install button prevention - runs first -->
+    <script>
+        // NUCLEAR PREVENTION - runs immediately when body starts loading
+        (function() {
+            console.log('🚫 IMMEDIATE: Installing ultra-aggressive install button prevention...');
+            
+            // Ultra-aggressive cleanup every 50ms
+            const ultraCleanup = setInterval(() => {
+                try {
+                    const elements = document.querySelectorAll('*');
+                    elements.forEach(el => {
+                        if (!el) return;
+                        
+                        const text = el.textContent || '';
+                        const innerHTML = el.innerHTML || '';
+                        const id = el.id || '';
+                        const className = el.className || '';
+                        
+                        // Check for any install-related content
+                        const hasInstallContent = text.toLowerCase().includes('install') || 
+                                                innerHTML.includes('📱') ||
+                                                text.includes('Add to') ||
+                                                id.toLowerCase().includes('install') ||
+                                                className.toLowerCase().includes('install');
+                        
+                        // Check for suspicious positioning
+                        const style = window.getComputedStyle(el);
+                        const isSuspiciousPosition = style.position === 'fixed' && 
+                                                   parseInt(style.top) <= 100 && 
+                                                   parseInt(style.left) <= 100;
+                        
+                        // Remove if matches criteria
+                        if ((hasInstallContent || isSuspiciousPosition) && 
+                            (el.tagName === 'BUTTON' || el.tagName === 'DIV' || el.tagName === 'SPAN')) {
+                            console.log('🗑️ ULTRA-CLEANUP: Removing element:', el.tagName, text.substring(0, 50), id);
+                            el.remove();
+                        }
+                    });
+                } catch (e) {
+                    // Ignore errors during aggressive cleanup
+                }
+            }, 50);
+            
+            // Stop ultra cleanup after 30 seconds
+            setTimeout(() => {
+                console.log('🔄 Reducing cleanup frequency after 30 seconds');
+                clearInterval(ultraCleanup);
+            }, 30000);
+        })();
+    </script>
+    
     <!-- Notification container -->
     <div class="notification-container" id="notificationContainer"></div>
 
@@ -1594,33 +1720,393 @@
         <!-- Add new product button -->
         <div class="action-button add-product-btn" onclick="addNewProduct()">
             <i class="fas fa-plus action-icon"></i>
-            <span class="action-text">Add New Product</span>
+            <span class="action-text">Add Product</span>
         </div>
 
-        <!-- Open camera button -->
+        <!-- Scan QR button -->
         <div class="action-button camera-btn" onclick="openCamera()">
-            <i class="fas fa-camera action-icon"></i>
-            <span class="action-text">Open Camera</span>
+            <i class="fas fa-qrcode action-icon"></i>
+            <span class="action-text">Scan QR</span>
         </div>
     </div>
 
     <!-- JavaScript for interactivity and demo data -->
+
     <script>
+        console.log('🚀 Starting PWA setup...');
+        console.log('🔍 Browser Info:', navigator.userAgent);
+        console.log('🌐 Current URL:', window.location.href);
+
+        // NUCLEAR INSTALL BUTTON PREVENTION - Block at DOM level
+        console.log('🚫 Installing DOM mutation observer to block install buttons...');
+        
+        // Aggressive cleanup function
+        function removeInstallButtons() {
+            let removed = false;
+            
+            // Remove by ID
+            const installBtn = document.getElementById('installButton');
+            if (installBtn) {
+                console.log('🗑️ Removing install button by ID');
+                installBtn.remove();
+                removed = true;
+            }
+            
+            // Remove any buttons with install-related attributes or content
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach(element => {
+                const style = window.getComputedStyle(element);
+                const text = element.textContent || '';
+                const innerHTML = element.innerHTML || '';
+                const id = element.id || '';
+                const className = element.className || '';
+                
+                // Check for install-related content or positioning
+                const hasInstallContent = text.toLowerCase().includes('install') || 
+                                        innerHTML.includes('📱') ||
+                                        text.includes('Add to') ||
+                                        text.includes('Install App') ||
+                                        id.toLowerCase().includes('install') ||
+                                        className.toLowerCase().includes('install');
+                
+                const isTopLeft = style.position === 'fixed' && 
+                                parseInt(style.top) <= 100 && 
+                                parseInt(style.left) <= 100;
+                
+                const isSuspiciousButton = element.tagName === 'BUTTON' && (hasInstallContent || isTopLeft);
+                const isSuspiciousDiv = element.tagName === 'DIV' && hasInstallContent && style.position === 'fixed';
+                
+                if (isSuspiciousButton || isSuspiciousDiv) {
+                    console.log('🗑️ Removing suspicious install element:', element.tagName, text, id, className);
+                    element.remove();
+                    removed = true;
+                }
+            });
+            
+            return removed;
+        }
+
+        // DOM Mutation Observer to catch dynamically added install buttons
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1) { // Element node
+                            const element = node;
+                            const text = element.textContent || '';
+                            const id = element.id || '';
+                            const className = element.className || '';
+                            
+                            // Block install-related elements immediately
+                            if (text.toLowerCase().includes('install') || 
+                                text.includes('📱') ||
+                                text.includes('Add to') ||
+                                id.toLowerCase().includes('install') ||
+                                className.toLowerCase().includes('install')) {
+                                console.log('🚫 DOM Observer: Blocking install element creation:', element.tagName, text, id);
+                                element.remove();
+                            }
+                            
+                            // Also check children of added nodes
+                            const suspiciousChildren = element.querySelectorAll('*');
+                            suspiciousChildren.forEach(child => {
+                                const childText = child.textContent || '';
+                                const childId = child.id || '';
+                                const childClass = child.className || '';
+                                
+                                if (childText.toLowerCase().includes('install') || 
+                                    childText.includes('📱') ||
+                                    childId.toLowerCase().includes('install') ||
+                                    childClass.toLowerCase().includes('install')) {
+                                    console.log('🚫 DOM Observer: Blocking child install element:', child.tagName, childText, childId);
+                                    child.remove();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        // Start observing immediately
+        observer.observe(document.body || document.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['id', 'class', 'style']
+        });
+
+        // Override createElement to block install button creation
+        const originalCreateElement = document.createElement;
+        document.createElement = function(tagName) {
+            const element = originalCreateElement.call(this, tagName);
+            
+            // If it's a button, monitor its content changes
+            if (tagName.toLowerCase() === 'button') {
+                const originalSetTextContent = element.__lookupSetter__('textContent') || 
+                                            Object.getOwnPropertyDescriptor(Node.prototype, 'textContent').set;
+                
+                Object.defineProperty(element, 'textContent', {
+                    set: function(value) {
+                        if (value && value.toLowerCase().includes('install')) {
+                            console.log('🚫 Blocked button with install text:', value);
+                            return;
+                        }
+                        originalSetTextContent.call(this, value);
+                    },
+                    get: function() {
+                        return this.nodeValue;
+                    }
+                });
+            }
+            
+            return element;
+        };
+
+        // Register Service Worker for PWA
+
+        console.log('🔍 Checking Service Worker support...');
+        console.log('navigator.serviceWorker exists:', !!navigator.serviceWorker);
+        console.log('serviceWorker in navigator:', 'serviceWorker' in navigator);
+
+        if ('serviceWorker' in navigator && navigator.serviceWorker) {
+            console.log('✅ Service Worker is supported in this browser');
+
+            window.addEventListener('load', () => {
+                console.log('🔄 Page loaded, attempting to register service worker...');
+                console.log('📁 Trying to register: ./serviceworker.js');
+
+                navigator.serviceWorker.register('./serviceworker.js')
+                    .then((registration) => {
+                        console.log('✅ SW registered successfully:', registration);
+                        console.log('📋 SW scope:', registration.scope);
+                        console.log('🔧 SW installing:', registration.installing);
+                        console.log('⏳ SW waiting:', registration.waiting);
+                        console.log('🟢 SW active:', registration.active);
+
+                        // Listen for service worker state changes
+                        if (registration.installing) {
+                            console.log('🔧 Service Worker is installing...');
+                            registration.installing.addEventListener('statechange', (e) => {
+                                console.log('🔄 SW state changed to:', e.target.state);
+                            });
+                        }
+
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            console.log('🔄 New service worker found');
+                        });
+
+                        // Force activation if waiting
+                        if (registration.waiting) {
+                            console.log('⏭️ Service Worker waiting, attempting to activate...');
+                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        }
+                    })
+                    .catch((registrationError) => {
+                        console.error('❌ SW registration failed:', registrationError);
+                        console.error('💥 Error name:', registrationError.name);
+                        console.error('📝 Error message:', registrationError.message);
+                        console.error('📍 Error stack:', registrationError.stack);
+
+                        // Try alternative registration paths
+                        console.log('🔄 Trying alternative path: /serviceworker.js');
+                        return navigator.serviceWorker.register('/serviceworker.js');
+                    })
+                    .then((registration) => {
+                        if (registration) {
+                            console.log('✅ SW registered with alternative path:', registration);
+                        }
+                    })
+                    .catch((finalError) => {
+                        console.error('❌ Final SW registration failed:', finalError);
+                        console.error('🚫 All registration attempts failed');
+                    });
+            });
+
+            // Debug: Check service worker state every 3 seconds (only if supported)
+            setInterval(() => {
+                console.log('🔍 SW Debug Check:');
+                if (navigator.serviceWorker) {
+                    console.log('   Controller:', navigator.serviceWorker.controller ? '✅ Active' : '❌ None');
+                    console.log('   Ready:', navigator.serviceWorker.ready ? '✅ Ready' : '❌ Not Ready');
+
+                    navigator.serviceWorker.getRegistrations().then(registrations => {
+                        console.log('   Registrations:', registrations.length > 0 ? `✅ ${registrations.length} found` : '❌ None found');
+                        registrations.forEach((reg, index) => {
+                            console.log(`   Registration ${index + 1}:`, reg.scope, reg.active ? '(Active)' : '(Inactive)');
+                        });
+                    }).catch(error => {
+                        console.error('   Registration check failed:', error);
+                    });
+                } else {
+                    console.log('   ❌ Service Worker not available');
+                }
+            }, 5000); // Increased to 5 seconds to reduce spam
+
+        } else {
+            console.log('❌ Service Worker not supported in this browser');
+            console.log('🌐 User Agent:', navigator.userAgent);
+            console.log('🔍 navigator.serviceWorker:', navigator.serviceWorker);
+        }
+
+        // PWA Install Prompt Handler
+        let deferredPrompt;
+        let isInstallable = false;
+
+        console.log('🎯 Setting up install prompt listener...');
+
+        // Listen for the install prompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('🎯 PWA Install prompt triggered!');
+            console.log('📱 Event details:', e);
+
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+
+            // Save the event so it can be triggered later
+            deferredPrompt = e;
+            isInstallable = true;
+
+            console.log('✅ PWA is installable - ready for browser install prompts');
+            
+            // Immediate cleanup with multiple attempts
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    removeInstallButtons();
+                }, i * 50); // Every 50ms for 500ms
+            }
+        });
+
+        // Aggressive cleanup function
+        function removeInstallButtons() {
+            let removed = false;
+            
+            // Remove by ID
+            const installBtn = document.getElementById('installButton');
+            if (installBtn) {
+                console.log('🗑️ Removing install button by ID');
+                installBtn.remove();
+                removed = true;
+            }
+            
+            // Remove any buttons with install-related attributes or content
+            const allButtons = document.querySelectorAll('button, div, span, a');
+            allButtons.forEach(element => {
+                const style = window.getComputedStyle(element);
+                const text = element.textContent || '';
+                const innerHTML = element.innerHTML || '';
+                const id = element.id || '';
+                const className = element.className || '';
+                
+                // Check for install-related content or positioning
+                const hasInstallContent = text.toLowerCase().includes('install') || 
+                                        innerHTML.includes('📱') ||
+                                        text.includes('Add to') ||
+                                        id.toLowerCase().includes('install') ||
+                                        className.toLowerCase().includes('install');
+                
+                const isTopLeft = style.position === 'fixed' && 
+                                parseInt(style.top) <= 50 && 
+                                parseInt(style.left) <= 50;
+                
+                if (hasInstallContent || (isTopLeft && element.tagName === 'BUTTON')) {
+                    console.log('🗑️ Removing suspicious install element:', element.tagName, text, id, className);
+                    element.remove();
+                    removed = true;
+                }
+            });
+            
+            return removed;
+        }
+
+        // Continuous aggressive cleanup - runs every 200ms
+        setInterval(() => {
+            removeInstallButtons();
+        }, 200);
+
+        // Additional cleanup on page visibility change (tab switching)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('� Page became visible - running cleanup');
+                setTimeout(() => {
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => removeInstallButtons(), i * 100);
+                    }
+                }, 100);
+            }
+        });
+
+        // Cleanup on page focus
+        window.addEventListener('focus', () => {
+            console.log('🔄 Window focused - running cleanup');
+            setTimeout(() => {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => removeInstallButtons(), i * 100);
+                }
+            }, 100);
+        });
+
+        // Listen for app installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('🎉 PWA was installed successfully');
+        });
+
+        // Check for product save success from AddNewProduct page
+        function checkForProductSaveSuccess() {
+            console.log('🔍 Checking for product save success...');
+            const successData = sessionStorage.getItem('productSaveSuccess');
+            console.log('📦 Success data from sessionStorage:', successData);
+            
+            if (successData) {
+                try {
+                    const data = JSON.parse(successData);
+                    const timeDiff = Date.now() - data.timestamp;
+                    
+                    console.log('⏰ Time difference:', timeDiff, 'ms');
+                    console.log('💬 Message:', data.message);
+                    
+                    // Only show notification if it's recent (within 10 seconds)
+                    if (timeDiff < 10000) {
+                        console.log('✅ Showing success notification');
+                        showNotification('Success!', data.message, 'success');
+                    } else {
+                        console.log('⏰ Notification too old, skipping');
+                    }
+                    
+                    // Remove the success data after displaying
+                    sessionStorage.removeItem('productSaveSuccess');
+                    console.log('🧹 Success data removed from sessionStorage');
+                } catch (error) {
+                    console.error('❌ Error parsing product save success data:', error);
+                    sessionStorage.removeItem('productSaveSuccess');
+                }
+            } else {
+                console.log('📭 No success data found in sessionStorage');
+            }
+        }
+
         // Notification system
         function showNotification(title, message, type = 'info') {
+            console.log('🔔 showNotification called:', { title, message, type });
             const container = document.getElementById('notificationContainer');
             
+            if (!container) {
+                console.error('❌ Notification container not found');
+                return;
+            }
+
             // Create notification element
             const notification = document.createElement('div');
             notification.className = 'notification';
-            
+
             // Set icon based on type
             let icon = 'fa-info-circle';
             if (type === 'success') icon = 'fa-check-circle';
             else if (type === 'warning') icon = 'fa-exclamation-triangle';
             else if (type === 'error') icon = 'fa-times-circle';
             else if (type === 'tab-switch') icon = 'fa-exchange-alt';
-            
+
             notification.innerHTML = `
                 <div class="notification-icon">
                     <i class="fas ${icon}"></i>
@@ -1633,20 +2119,20 @@
                     <i class="fas fa-times"></i>
                 </button>
             `;
-            
+
             // Add to container
             container.appendChild(notification);
-            
+
             // Trigger show animation
             setTimeout(() => {
                 notification.classList.add('show');
             }, 100);
-            
+
             // Auto-hide after 4 seconds
             setTimeout(() => {
                 hideNotification(notification);
             }, 4000);
-            
+
             return notification;
         }
 
@@ -2117,7 +2603,7 @@
                 category: "clothing"
             }
         ];
-            
+
         // Pagination variables
         const itemsPerPage = 10;
         let currentPage = 1;
@@ -2129,6 +2615,32 @@
 
         // Initialize the page when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
+            // Check for product save success notification
+            checkForProductSaveSuccess();
+            
+            // IMMEDIATE NUCLEAR CLEANUP on page load
+            console.log('🧹 DOM loaded - running NUCLEAR cleanup');
+            
+            // Run cleanup 20 times in first 2 seconds
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    removeInstallButtons();
+                    
+                    // Extra aggressive - remove ALL fixed position buttons in top area
+                    const allButtons = document.querySelectorAll('button, div, span');
+                    allButtons.forEach(el => {
+                        const style = window.getComputedStyle(el);
+                        if (style.position === 'fixed' && 
+                            parseInt(style.top) <= 100 && 
+                            parseInt(style.left) <= 100 &&
+                            parseInt(style.zIndex) > 1000) {
+                            console.log('🗑️ NUCLEAR: Removing high z-index fixed element in top area');
+                            el.remove();
+                        }
+                    });
+                }, i * 100);
+            }
+            
             renderProducts();
             renderPagination();
         });
@@ -2270,7 +2782,7 @@
         function switchTab(tab) {
             // Store previous tab for notification
             const previousTab = currentTab;
-            
+
             // Update current tab state
             currentTab = tab;
             currentPage = 1; // Reset to first page when switching tabs
@@ -2294,7 +2806,7 @@
                     const categoryMatch = currentFilter === 'all' || product.category === currentFilter;
                     return tabMatch && categoryMatch;
                 }).length;
-                
+
                 showNotification(
                     `Switched to ${tabDisplay}`,
                     `Now viewing ${productCount} products in ${tabDisplay} section`,
@@ -2349,19 +2861,19 @@
         // Function to handle product card click
         function viewProduct(productId) {
             const product = demoProducts.find(p => p.id === productId);
-            
+
             if (product) {
                 console.log('Viewing product:', product);
-                
+
                 // Store complete product data in sessionStorage
                 sessionStorage.setItem('currentProduct', JSON.stringify(product));
-                
+
                 // Navigate to ProductDisplayPage with simple URL parameters
                 const params = new URLSearchParams({
                     id: product.id,
                     name: product.name
                 });
-                
+
                 window.location.href = `ProductDisplayPage.html?${params.toString()}`;
             } else {
                 console.error('Product not found:', productId);
@@ -2373,6 +2885,12 @@
         function addNewProduct() {
             console.log('Navigating to add new product page');
             window.location.href = 'AddNewProduct.html';
+        }
+
+        // Function to open product number search
+        function openProductNumberSearch() {
+            console.log('Opening product number search');
+            window.location.href = 'ProductNumberSearch.html';
         }
 
         // Function to handle camera button - updated to actually open camera
