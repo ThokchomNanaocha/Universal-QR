@@ -751,17 +751,17 @@
         /* Bottom action buttons container */
         .bottom-actions {
             position: fixed;
-            bottom: 35px;
+            bottom: 15px;
             left: 0;
             right: 0;
             background: white;
-            padding: 10px 16px 12px 16px;
+            padding: 8px 16px;
             box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.15);
             display: none !important;
             /* Force hidden on desktop */
             justify-content: center;
-            gap: 15px;
-            z-index: 50;
+            gap: 12px;
+            z-index: 1001;
             border-radius: 0;
             border-top: 1px solid #e2e8f0;
         }
@@ -773,15 +773,15 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
             transition: all 0.3s ease;
             background: #667eea;
             color: white;
             border: none;
             font-weight: 600;
-            font-size: 12px;
-            min-width: 120px;
+            font-size: 11px;
+            min-width: 90px;
             flex: 1;
             box-shadow: 0 2px 12px rgba(102, 126, 234, 0.25);
         }
@@ -798,13 +798,13 @@
 
         /* Action button icon styling */
         .action-icon {
-            font-size: 14px;
-            margin-right: 6px;
+            font-size: 13px;
+            margin-right: 5px;
         }
 
         /* Action button text styling */
         .action-text {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             line-height: 1.2;
         }
@@ -1098,8 +1098,8 @@
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
-                margin-bottom: 120px;
-                /* Increased to account for higher floating bottom actions */
+                margin-bottom: 90px;
+                /* Account for bottom actions at bottom: 15px */
             }
 
             /* Adjust main content padding */
@@ -1112,17 +1112,19 @@
                 display: flex !important;
                 /* Override desktop hidden state */
                 gap: 10px;
-                padding: 8px 12px 10px 12px;
-                bottom: 30px;
+                padding: 8px 16px;
+                bottom: 15px;
                 left: 0;
                 right: 0;
+                z-index: 1001;
+                position: fixed;
             }
 
             .action-button {
-                min-width: 100px;
-                padding: 6px 10px;
+                min-width: 90px;
+                padding: 6px 12px;
                 font-size: 11px;
-                border-radius: 10px;
+                border-radius: 8px;
             }
 
             /* Show both add product and camera buttons in mobile view */
@@ -1156,12 +1158,12 @@
 
             /* Mobile action icon and text adjustments */
             .action-icon {
-                font-size: 14px;
-                margin-right: 6px;
+                font-size: 13px;
+                margin-right: 5px;
             }
 
             .action-text {
-                font-size: 12px;
+                font-size: 11px;
                 font-weight: 600;
             }
 
@@ -1514,6 +1516,223 @@
                 transform: translateY(-100px);
             }
         }
+
+        /* PWA Install Prompt Styles */
+        .pwa-install-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .pwa-install-overlay.show {
+            display: flex;
+        }
+
+        .pwa-install-popup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.4s ease-out forwards;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pwa-install-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 35px;
+            color: white;
+            animation: bounce 2s infinite;
+        }
+
+        .pwa-install-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pwa-install-message {
+            font-size: 16px;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .pwa-install-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pwa-install-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .pwa-install-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .pwa-cancel-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .pwa-cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .pwa-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pwa-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* PWA Feature highlights */
+        .pwa-features {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pwa-feature {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .pwa-feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .pwa-feature-text {
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.3;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Mobile responsive for PWA install prompt */
+        @media (max-width: 768px) {
+            .pwa-install-popup {
+                margin: 0 10px;
+                padding: 25px 20px;
+                max-width: 350px;
+            }
+
+            .pwa-install-title {
+                font-size: 22px;
+            }
+
+            .pwa-install-message {
+                font-size: 15px;
+            }
+
+            .pwa-install-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .pwa-install-btn,
+            .pwa-cancel-btn {
+                width: 100%;
+                min-width: auto;
+            }
+        }
     </style>
 </head>
 
@@ -1571,6 +1790,50 @@
     
     <!-- Notification container -->
     <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- PWA Install Prompt Overlay -->
+    <div class="pwa-install-overlay" id="pwaInstallOverlay">
+        <div class="pwa-install-popup">
+            <button class="pwa-close-btn" onclick="closePWAPrompt()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="pwa-install-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            
+            <h3 class="pwa-install-title">Add to Home Screen</h3>
+            <p class="pwa-install-message">Universal QR is better as an app! Get faster access and a native experience.</p>
+            
+            <div class="pwa-features">
+                <div class="pwa-feature">
+                    <div class="pwa-feature-icon">⚡</div>
+                    <div class="pwa-feature-text">Lightning Fast</div>
+                </div>
+                <div class="pwa-feature">
+                    <div class="pwa-feature-icon">📱</div>
+                    <div class="pwa-feature-text">Native Feel</div>
+                </div>
+                <div class="pwa-feature">
+                    <div class="pwa-feature-icon">🔄</div>
+                    <div class="pwa-feature-text">Works Offline</div>
+                </div>
+            </div>
+            
+            <div class="pwa-install-buttons">
+                <button class="pwa-install-btn" onclick="installPWA()">
+                    <i class="fas fa-download" style="margin-right: 8px;"></i>
+                    Install App
+                </button>
+                <button class="pwa-cancel-btn" onclick="dismissPWAPrompt()">
+                    Maybe Later
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEMPORARY TEST BUTTON - Remove after testing -->
+    <button onclick="testPWAPrompt()" style="position:fixed;top:10px;left:10px;z-index:99999;background:red;color:white;padding:10px;border:none;border-radius:5px;font-size:12px;">TEST PWA</button>
 
     <!-- Full screen page container with edge padding -->
     <div class="page-container">
@@ -1697,6 +1960,12 @@
                             <i class="fas fa-plus"></i>
                             <span>Add New Product</span>
                         </button>
+                        
+                        <!-- PWA Test Button -->
+                        <button class="add-product-header-btn" onclick="testShowPWA()" style="background: #e74c3c; margin-left: 10px;">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Test PWA</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -1733,258 +2002,418 @@
     <!-- JavaScript for interactivity and demo data -->
 
     <script>
-        console.log('🚀 Starting PWA setup...');
-        console.log('🔍 Browser Info:', navigator.userAgent);
-        console.log('🌐 Current URL:', window.location.href);
+        // SIMPLE PWA INSTALL PROMPT - GUARANTEED TO SHOW
+        console.log('🚀 Starting SIMPLE PWA setup...');
 
-        // NUCLEAR INSTALL BUTTON PREVENTION - Block at DOM level
-        console.log('🚫 Installing DOM mutation observer to block install buttons...');
-        
-        // Aggressive cleanup function
-        function removeInstallButtons() {
-            let removed = false;
+        // Check if mobile with detailed logging
+        function isMobileDevice() {
+            const userAgent = navigator.userAgent;
+            const windowWidth = window.innerWidth;
+            const regexTest = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
             
-            // Remove by ID
-            const installBtn = document.getElementById('installButton');
-            if (installBtn) {
-                console.log('🗑️ Removing install button by ID');
-                installBtn.remove();
-                removed = true;
-            }
+            console.log('🔍 MOBILE DETECTION DEBUG:');
+            console.log('📱 User Agent:', userAgent);
+            console.log('📏 Window Width:', windowWidth);
+            console.log('🧬 Regex Test Result:', regexTest);
+            console.log('✅ Width Test (<=768):', windowWidth <= 768);
             
-            // Remove any buttons with install-related attributes or content
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach(element => {
-                const style = window.getComputedStyle(element);
-                const text = element.textContent || '';
-                const innerHTML = element.innerHTML || '';
-                const id = element.id || '';
-                const className = element.className || '';
-                
-                // Check for install-related content or positioning
-                const hasInstallContent = text.toLowerCase().includes('install') || 
-                                        innerHTML.includes('📱') ||
-                                        text.includes('Add to') ||
-                                        text.includes('Install App') ||
-                                        id.toLowerCase().includes('install') ||
-                                        className.toLowerCase().includes('install');
-                
-                const isTopLeft = style.position === 'fixed' && 
-                                parseInt(style.top) <= 100 && 
-                                parseInt(style.left) <= 100;
-                
-                const isSuspiciousButton = element.tagName === 'BUTTON' && (hasInstallContent || isTopLeft);
-                const isSuspiciousDiv = element.tagName === 'DIV' && hasInstallContent && style.position === 'fixed';
-                
-                if (isSuspiciousButton || isSuspiciousDiv) {
-                    console.log('🗑️ Removing suspicious install element:', element.tagName, text, id, className);
-                    element.remove();
-                    removed = true;
-                }
-            });
+            const isMobile = regexTest || windowWidth <= 768;
+            console.log('🎯 FINAL MOBILE RESULT:', isMobile);
             
-            return removed;
+            return isMobile;
         }
 
-        // DOM Mutation Observer to catch dynamically added install buttons
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === 1) { // Element node
-                            const element = node;
-                            const text = element.textContent || '';
-                            const id = element.id || '';
-                            const className = element.className || '';
-                            
-                            // Block install-related elements immediately
-                            if (text.toLowerCase().includes('install') || 
-                                text.includes('📱') ||
-                                text.includes('Add to') ||
-                                id.toLowerCase().includes('install') ||
-                                className.toLowerCase().includes('install')) {
-                                console.log('🚫 DOM Observer: Blocking install element creation:', element.tagName, text, id);
-                                element.remove();
-                            }
-                            
-                            // Also check children of added nodes
-                            const suspiciousChildren = element.querySelectorAll('*');
-                            suspiciousChildren.forEach(child => {
-                                const childText = child.textContent || '';
-                                const childId = child.id || '';
-                                const childClass = child.className || '';
-                                
-                                if (childText.toLowerCase().includes('install') || 
-                                    childText.includes('📱') ||
-                                    childId.toLowerCase().includes('install') ||
-                                    childClass.toLowerCase().includes('install')) {
-                                    console.log('🚫 DOM Observer: Blocking child install element:', child.tagName, childText, childId);
-                                    child.remove();
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        });
-
-        // Start observing immediately
-        observer.observe(document.body || document.documentElement, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['id', 'class', 'style']
-        });
-
-        // Override createElement to block install button creation
-        const originalCreateElement = document.createElement;
-        document.createElement = function(tagName) {
-            const element = originalCreateElement.call(this, tagName);
+        // Check if PWA is already installed with detailed logging
+        function isPWAInstalled() {
+            console.log('🔍 PWA INSTALLATION CHECK:');
             
-            // If it's a button, monitor its content changes
-            if (tagName.toLowerCase() === 'button') {
-                const originalSetTextContent = element.__lookupSetter__('textContent') || 
-                                            Object.getOwnPropertyDescriptor(Node.prototype, 'textContent').set;
-                
-                Object.defineProperty(element, 'textContent', {
-                    set: function(value) {
-                        if (value && value.toLowerCase().includes('install')) {
-                            console.log('🚫 Blocked button with install text:', value);
-                            return;
-                        }
-                        originalSetTextContent.call(this, value);
-                    },
-                    get: function() {
-                        return this.nodeValue;
-                    }
-                });
-            }
+            // Check display mode
+            const standaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+            console.log('📱 Standalone Mode:', standaloneMode);
             
-            return element;
-        };
-
-        // Register Service Worker for PWA
-
-        console.log('🔍 Checking Service Worker support...');
-        console.log('navigator.serviceWorker exists:', !!navigator.serviceWorker);
-        console.log('serviceWorker in navigator:', 'serviceWorker' in navigator);
-
-        if ('serviceWorker' in navigator && navigator.serviceWorker) {
-            console.log('✅ Service Worker is supported in this browser');
-
-            window.addEventListener('load', () => {
-                console.log('🔄 Page loaded, attempting to register service worker...');
-                console.log('📁 Trying to register: ./serviceworker.js');
-
-                navigator.serviceWorker.register('./serviceworker.js')
-                    .then((registration) => {
-                        console.log('✅ SW registered successfully:', registration);
-                        console.log('📋 SW scope:', registration.scope);
-                        console.log('🔧 SW installing:', registration.installing);
-                        console.log('⏳ SW waiting:', registration.waiting);
-                        console.log('🟢 SW active:', registration.active);
-
-                        // Listen for service worker state changes
-                        if (registration.installing) {
-                            console.log('🔧 Service Worker is installing...');
-                            registration.installing.addEventListener('statechange', (e) => {
-                                console.log('🔄 SW state changed to:', e.target.state);
-                            });
-                        }
-
-                        // Check for updates
-                        registration.addEventListener('updatefound', () => {
-                            console.log('🔄 New service worker found');
-                        });
-
-                        // Force activation if waiting
-                        if (registration.waiting) {
-                            console.log('⏭️ Service Worker waiting, attempting to activate...');
-                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                        }
-                    })
-                    .catch((registrationError) => {
-                        console.error('❌ SW registration failed:', registrationError);
-                        console.error('💥 Error name:', registrationError.name);
-                        console.error('📝 Error message:', registrationError.message);
-                        console.error('📍 Error stack:', registrationError.stack);
-
-                        // Try alternative registration paths
-                        console.log('🔄 Trying alternative path: /serviceworker.js');
-                        return navigator.serviceWorker.register('/serviceworker.js');
-                    })
-                    .then((registration) => {
-                        if (registration) {
-                            console.log('✅ SW registered with alternative path:', registration);
-                        }
-                    })
-                    .catch((finalError) => {
-                        console.error('❌ Final SW registration failed:', finalError);
-                        console.error('🚫 All registration attempts failed');
-                    });
-            });
-
-            // Debug: Check service worker state every 3 seconds (only if supported)
-            setInterval(() => {
-                console.log('🔍 SW Debug Check:');
-                if (navigator.serviceWorker) {
-                    console.log('   Controller:', navigator.serviceWorker.controller ? '✅ Active' : '❌ None');
-                    console.log('   Ready:', navigator.serviceWorker.ready ? '✅ Ready' : '❌ Not Ready');
-
-                    navigator.serviceWorker.getRegistrations().then(registrations => {
-                        console.log('   Registrations:', registrations.length > 0 ? `✅ ${registrations.length} found` : '❌ None found');
-                        registrations.forEach((reg, index) => {
-                            console.log(`   Registration ${index + 1}:`, reg.scope, reg.active ? '(Active)' : '(Inactive)');
-                        });
-                    }).catch(error => {
-                        console.error('   Registration check failed:', error);
-                    });
-                } else {
-                    console.log('   ❌ Service Worker not available');
-                }
-            }, 5000); // Increased to 5 seconds to reduce spam
-
-        } else {
-            console.log('❌ Service Worker not supported in this browser');
-            console.log('🌐 User Agent:', navigator.userAgent);
-            console.log('🔍 navigator.serviceWorker:', navigator.serviceWorker);
+            // Check iOS standalone
+            const iOSStandalone = navigator.standalone === true;
+            console.log('🍎 iOS Standalone:', iOSStandalone);
+            
+            // Check Android app context
+            const androidApp = document.referrer.startsWith('android-app://');
+            console.log('🤖 Android App Context:', androidApp);
+            
+            const isInstalled = standaloneMode || iOSStandalone || androidApp;
+            console.log('🎯 FINAL INSTALLATION RESULT:', isInstalled);
+            
+            return isInstalled;
         }
 
-        // PWA Install Prompt Handler
-        let deferredPrompt;
-        let isInstallable = false;
+        // Simple PWA install prompt that WILL show up
+        function showSimplePWAPrompt() {
+            console.log('📱 Showing SIMPLE PWA prompt...');
+            
+            // Create a simple, unavoidable prompt
+            const promptDiv = document.createElement('div');
+            promptDiv.id = 'simplePWAPrompt';
+            promptDiv.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0, 0, 0, 0.8);
+                    z-index: 999999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: Arial, sans-serif;
+                ">
+                    <div style="
+                        background: white;
+                        border-radius: 15px;
+                        padding: 30px 25px;
+                        max-width: 350px;
+                        width: 90%;
+                        text-align: center;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    ">
+                        <div style="
+                            font-size: 48px;
+                            margin-bottom: 20px;
+                        ">📱</div>
+                        
+                        <h2 style="
+                            color: #333;
+                            margin-bottom: 15px;
+                            font-size: 22px;
+                        ">Add Universal QR to Home Screen</h2>
+                        
+                        <p style="
+                            color: #666;
+                            margin-bottom: 25px;
+                            line-height: 1.5;
+                            font-size: 16px;
+                        ">Get quick access to Universal QR by adding it to your home screen. It works like a native app!</p>
+                        
+                        <div style="
+                            display: flex;
+                            gap: 12px;
+                            justify-content: center;
+                        ">
+                            <button onclick="installSimplePWA()" style="
+                                background: #667eea;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                flex: 1;
+                            ">
+                                Add to Home Screen
+                            </button>
+                            
+                            <button onclick="closeSimplePWAPrompt()" style="
+                                background: #f0f0f0;
+                                color: #666;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                cursor: pointer;
+                                flex: 1;
+                            ">
+                                Not Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(promptDiv);
+            console.log('✅ SIMPLE PWA prompt added to page');
+        }
 
-        console.log('🎯 Setting up install prompt listener...');
+        // Install PWA function
+        let deferredPrompt = null;
 
-        // Listen for the install prompt event
         window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('🎯 PWA Install prompt triggered!');
-            console.log('📱 Event details:', e);
+            console.log('💾 Deferred prompt captured');
+            e.preventDefault();
+            deferredPrompt = e;
+        });
 
+        function installSimplePWA() {
+            console.log('📱 User wants to install PWA');
+            
+            if (deferredPrompt) {
+                console.log('🎯 Using browser install prompt');
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ User installed the PWA');
+                        closeSimplePWAPrompt();
+                        alert('App installed! Look for Universal QR icon on your home screen.');
+                    } else {
+                        console.log('❌ User dismissed install');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                console.log('📋 Showing manual install instructions');
+                showManualInstructions();
+            }
+        }
+
+        function showManualInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            let instructions = '';
+            
+            if (isIOS) {
+                instructions = `To install on iOS:
+        
+1. Tap the Share button (📤) at the bottom of Safari
+2. Scroll down and tap "Add to Home Screen"
+3. Tap "Add" to confirm
+
+Your app will appear on your home screen!`;
+            } else if (isAndroid) {
+                instructions = `To install on Android:
+        
+1. Tap the menu (⋮) in your browser
+2. Look for "Add to Home screen" or "Install app"
+3. Follow the prompts to install
+
+Your app will appear on your home screen!`;
+            } else {
+                instructions = `To install:
+        
+Look for an install icon in your browser's address bar, or check your browser menu for "Install app" option.`;
+            }
+            
+            alert(instructions);
+            closeSimplePWAPrompt();
+        }
+
+        function closeSimplePWAPrompt() {
+            const prompt = document.getElementById('simplePWAPrompt');
+            if (prompt) {
+                prompt.remove();
+            }
+            
+            // Remember user's choice for 7 days
+            localStorage.setItem('pwa-prompt-dismissed', Date.now());
+        }
+
+        // Check if we should show the prompt with detailed logging
+        function shouldShowPWAPrompt() {
+            console.log('🔍 PWA PROMPT DECISION LOGIC:');
+            
+            // Check mobile
+            const mobile = isMobileDevice();
+            console.log('📱 Is Mobile:', mobile);
+            
+            // Check installation
+            const installed = isPWAInstalled();
+            console.log('📲 Is Installed:', installed);
+            
+            // Check dismissal
+            const dismissed = localStorage.getItem('pwa-prompt-dismissed');
+            console.log('⏰ Dismissal Data:', dismissed);
+            
+            if (dismissed) {
+                const dismissedTime = parseInt(dismissed);
+                const daysSince = (Date.now() - dismissedTime) / (1000 * 60 * 60 * 24);
+                console.log('📅 Days Since Dismissal:', daysSince.toFixed(2));
+                
+                if (daysSince < 7) {
+                    console.log('❌ BLOCKED: Recently dismissed (< 7 days)');
+                    return false;
+                }
+            }
+            
+            if (!mobile) {
+                console.log('❌ BLOCKED: Not mobile device');
+                return false;
+            }
+            
+            if (installed) {
+                console.log('❌ BLOCKED: PWA already installed');
+                return false;
+            }
+            
+            console.log('✅ SHOULD SHOW: All conditions met');
+            return true;
+        }
+
+        // Show prompt immediately when page loads on mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('� === PWA INITIALIZATION DEBUG ===');
+            console.log('�📄 DOM Content Loaded at:', new Date().toISOString());
+            
+            // Environment check
+            console.log('🌍 Environment Information:');
+            console.log('📱 User Agent:', navigator.userAgent);
+            console.log('📏 Viewport:', window.innerWidth + 'x' + window.innerHeight);
+            console.log('🔗 URL:', window.location.href);
+            console.log('🌐 Protocol:', window.location.protocol);
+            console.log('🏠 Origin:', window.location.origin);
+            
+            // Feature support check
+            console.log('🔍 Browser Feature Support:');
+            console.log('📋 getUserMedia:', !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia));
+            console.log('📱 matchMedia:', !!window.matchMedia);
+            console.log('💾 localStorage:', !!window.localStorage);
+            console.log('🎮 beforeinstallprompt:', 'onbeforeinstallprompt' in window);
+            
+            // Check PWA conditions
+            console.log('🎯 PWA Decision Process:');
+            const shouldShow = shouldShowPWAPrompt();
+            
+            if (shouldShow) {
+                console.log('✅ CONDITIONS MET: Scheduling PWA prompt in 1 second...');
+                setTimeout(() => {
+                    console.log('⏰ TIMER TRIGGERED: Showing PWA prompt now');
+                    showSimplePWAPrompt();
+                }, 1000);
+            } else {
+                console.log('❌ CONDITIONS NOT MET: PWA prompt will not show');
+            }
+            
+            console.log('🔧 PWA initialization complete');
+        });
+
+        // Listen for successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('🎉 PWA installed successfully');
+            alert('Universal QR has been installed! You can now access it from your home screen.');
+            closeSimplePWAPrompt();
+        });
+
+        console.log('🔧 SIMPLE PWA setup complete');
+
+        // FORCE SHOW PWA TEST FUNCTION - Enhanced with debugging
+        function testShowPWA() {
+            console.log('🧪 === MANUAL PWA TEST STARTED ===');
+            
+            // Clear dismissals
+            localStorage.removeItem('pwa-prompt-dismissed');
+            console.log('🧹 Cleared dismissal data');
+            
+            // Force check conditions
+            console.log('🔍 Current Environment Check:');
+            console.log('📱 User Agent:', navigator.userAgent);
+            console.log('📏 Screen Width:', window.innerWidth);
+            console.log('🌐 Protocol:', window.location.protocol);
+            console.log('🔗 URL:', window.location.href);
+            
+            // Check PWA support
+            console.log('🔍 PWA Support Check:');
+            console.log('📋 beforeinstallprompt supported:', 'onbeforeinstallprompt' in window);
+            console.log('📱 standalone supported:', 'standalone' in navigator);
+            console.log('🎮 matchMedia supported:', 'matchMedia' in window);
+            
+            // Remove existing prompt
+            const existingPrompt = document.getElementById('simplePWAPrompt');
+            if (existingPrompt) {
+                console.log('🗑️ Removing existing prompt');
+                existingPrompt.remove();
+            }
+            
+            // Force show prompt
+            console.log('🚀 FORCING PWA PROMPT TO SHOW...');
+            showSimplePWAPrompt();
+        }
+
+        // IMMEDIATE TEST - Show PWA prompt in 2 seconds regardless of conditions
+        setTimeout(() => {
+            console.log('🚨 === EMERGENCY PWA TEST (2 seconds) ===');
+            console.log('⏰ Auto-test triggered at:', new Date().toISOString());
+            testShowPWA();
+        }, 2000);
+
+        // Old PWA functions removed - using simple version above
+
+        // Dismiss the PWA prompt
+        function dismissPWAPrompt() {
+            console.log('❌ User dismissed PWA prompt');
+            closePWAPrompt();
+            
+            // Remember dismissal for 7 days
+            localStorage.setItem('pwa-dismissed-time', Date.now().toString());
+        }
+
+        // Close the PWA prompt
+        function closePWAPrompt() {
+            const overlay = document.getElementById('pwaInstallOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+            }
+        }
+
+        // TEMPORARY TEST FUNCTION - Remove after testing
+        function testPWAPrompt() {
+            console.log('🧪 Testing PWA prompt manually...');
+            
+            // Clear localStorage to reset any dismissals
+            localStorage.removeItem('pwa-dismissed-time');
+            localStorage.removeItem('pwa-prompt-shown-time');
+            
+            // Reset state
+            hasShownPrompt = false;
+            
+            // Force show the prompt
+            const overlay = document.getElementById('pwaInstallOverlay');
+            if (overlay) {
+                overlay.classList.add('show');
+                console.log('✅ PWA prompt should now be visible');
+            } else {
+                console.error('❌ PWA overlay element not found');
+            }
+        }
+
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('🎯 beforeinstallprompt event fired');
+            
             // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
-
+            
             // Save the event so it can be triggered later
             deferredPrompt = e;
             isInstallable = true;
-
-            console.log('✅ PWA is installable - ready for browser install prompts');
             
-            // Immediate cleanup with multiple attempts
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    removeInstallButtons();
-                }, i * 50); // Every 50ms for 500ms
-            }
+            console.log('💾 Deferred prompt saved, installable:', isInstallable);
+            
+            // Show our custom prompt after a short delay if conditions are met
+            setTimeout(() => {
+                showSimplePWAPrompt();
+            }, 2000); // Wait 2 seconds after page load
         });
 
-        // Aggressive cleanup function
+        // Listen for app installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('🎉 PWA was installed successfully');
+            showNotification('App Installed!', 'Universal QR has been added to your home screen', 'success');
+            
+            // Clear any stored dismissal data
+            localStorage.removeItem('pwa-dismissed-time');
+            localStorage.removeItem('pwa-prompt-shown-time');
+            
+            deferredPrompt = null;
+        });
+
+        // End of SIMPLE PWA setup
+
+        // Aggressive cleanup function - FIXED to protect our PWA prompt
         function removeInstallButtons() {
             let removed = false;
             
             // Remove by ID
             const installBtn = document.getElementById('installButton');
-            if (installBtn) {
+            if (installBtn && installBtn.id !== 'simplePWAPrompt') {
                 console.log('🗑️ Removing install button by ID');
                 installBtn.remove();
                 removed = true;
@@ -1993,6 +2422,15 @@
             // Remove any buttons with install-related attributes or content
             const allButtons = document.querySelectorAll('button, div, span, a');
             allButtons.forEach(element => {
+                // PROTECTION: Never remove our simple PWA prompt or its children
+                if (element.id === 'simplePWAPrompt' || 
+                    element.closest('#simplePWAPrompt') ||
+                    element.getAttribute('onclick')?.includes('installSimplePWA') ||
+                    element.getAttribute('onclick')?.includes('closeSimplePWAPrompt')) {
+                    console.log('🛡️ PROTECTING simple PWA prompt from cleanup:', element.tagName);
+                    return; // Skip this element
+                }
+                
                 const style = window.getComputedStyle(element);
                 const text = element.textContent || '';
                 const innerHTML = element.innerHTML || '';
@@ -2020,10 +2458,10 @@
             return removed;
         }
 
-        // Continuous aggressive cleanup - runs every 200ms
-        setInterval(() => {
-            removeInstallButtons();
-        }, 200);
+        // DISABLED: Continuous aggressive cleanup - this was preventing PWA prompts
+        // setInterval(() => {
+        //     removeInstallButtons();
+        // }, 200);
 
         // Additional cleanup on page visibility change (tab switching)
         document.addEventListener('visibilitychange', () => {
